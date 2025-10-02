@@ -176,16 +176,17 @@ async function loadOrdersTable() {
                 .slice(0, 10);
             
             recentOrders.forEach(order => {
+                const orderCode = `#ORD${String(order.order_id).padStart(3, '0')}`;
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>#ORD${String(order.order_id).padStart(3, '0')}</td>
+                    <td>${orderCode}</td>
                     <td>${order.full_name || 'N/A'}</td>
                     <td>${formatDate(order.created_at)}</td>
                     <td>${formatCurrency(order.total_amount)}</td>
                     <td><span class="badge-status ${getOrderStatusClass(order.status)}">${getOrderStatusText(order.status)}</span></td>
                     <td>
                         <button class="btn-action edit" onclick="viewOrder(${order.order_id})">Xem</button>
-                        <button class="btn-action" onclick="updateOrderStatus(${order.order_id})">Cập nhật</button>
+                        <button class="btn-action" onclick="openOrderStatusModal(${order.order_id}, '${orderCode}')">Cập nhật</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -405,9 +406,43 @@ function setupStatisticsFilters() {
 // ============================================
 // Customer Actions
 // ============================================
-function viewCustomerDetail(customerId) {
-    alert(`Xem chi tiết khách hàng #${customerId}\n(Chức năng đang được phát triển)`);
-    // TODO: Implement customer detail modal or page
+async function viewCustomerDetail(customerId) {
+    try {
+        // Fetch customer details
+        const response = await fetch(`${API_BASE_URL}/users/${customerId}`);
+        
+        if (!response.ok) {
+            throw new Error('Failed to fetch customer details');
+        }
+        
+        const data = await response.json();
+        const customer = data.data;
+        
+        // Populate customer info
+        document.getElementById('detailCustomerId').textContent = `#CUS${String(customer.user_id).padStart(3, '0')}`;
+        document.getElementById('detailCustomerName').textContent = customer.full_name || 'N/A';
+        document.getElementById('detailCustomerEmail').textContent = customer.email || 'N/A';
+        document.getElementById('detailCustomerPhone').textContent = customer.phone || 'N/A';
+        document.getElementById('detailCustomerAddress').textContent = customer.address || 'Chưa cập nhật';
+        document.getElementById('detailCustomerJoined').textContent = formatDate(customer.created_at);
+        
+        // Calculate statistics from orders
+        const totalOrders = customer.total_orders || 0;
+        const totalSpent = customer.total_spent || 0;
+        
+        document.getElementById('detailCustomerOrders').textContent = totalOrders;
+        document.getElementById('detailCustomerSpent').textContent = formatCurrency(totalSpent);
+        
+        // Show modal
+        document.getElementById('customerModal').style.display = 'flex';
+    } catch (error) {
+        console.error('Error loading customer details:', error);
+        alert('Có lỗi khi tải thông tin khách hàng');
+    }
+}
+
+function closeCustomerModal() {
+    document.getElementById('customerModal').style.display = 'none';
 }
 
 async function toggleCustomerStatus(customerId, currentStatus) {
@@ -480,10 +515,104 @@ function getOrderStatusText(status) {
 // ============================================
 // Product Actions
 // ============================================
-function editProduct(productId) {
-    alert(`Chức năng sửa sản phẩm #${productId} đang được phát triển`);
-    // TODO: Implement edit product modal
+function openAddProductModal() {
+    document.getElementById('modalTitle').textContent = 'Thêm Sản Phẩm Mới';
+    document.getElementById('submitBtnText').textContent = 'Thêm Sản Phẩm';
+    document.getElementById('productForm').reset();
+    document.getElementById('productId').value = '';
+    document.getElementById('productModal').classList.add('show');
 }
+
+function editProduct(productId) {
+    // Fetch product details
+    fetch(`${API_BASE_URL}/products/${productId}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.success && data.product) {
+                const product = data.product;
+                
+                // Fill form with product data
+                document.getElementById('modalTitle').textContent = 'Sửa Sản Phẩm';
+                document.getElementById('submitBtnText').textContent = 'Cập Nhật';
+                document.getElementById('productId').value = product.id;
+                document.getElementById('productName').value = product.name;
+                document.getElementById('productCategory').value = product.category;
+                document.getElementById('productPrice').value = product.price;
+                document.getElementById('productStock').value = product.stock;
+                document.getElementById('productSize').value = product.size || '';
+                document.getElementById('productCondition').value = product.condition_percentage || 'good';
+                document.getElementById('productImage').value = product.image ? product.image.replace('/images/', '') : '';
+                document.getElementById('productDescription').value = product.description || '';
+                
+                // Show modal
+                document.getElementById('productModal').classList.add('show');
+            } else {
+                alert('Không thể tải thông tin sản phẩm');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching product:', error);
+            alert('Có lỗi xảy ra khi tải thông tin sản phẩm');
+        });
+}
+
+function closeProductModal() {
+    document.getElementById('productModal').classList.remove('show');
+    document.getElementById('productForm').reset();
+}
+
+// Handle Product Form Submit
+document.addEventListener('DOMContentLoaded', function() {
+    const productForm = document.getElementById('productForm');
+    if (productForm) {
+        productForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const productId = document.getElementById('productId').value;
+            const isEdit = productId !== '';
+            
+            const productData = {
+                name: document.getElementById('productName').value,
+                category: document.getElementById('productCategory').value,
+                price: parseFloat(document.getElementById('productPrice').value),
+                stock: parseInt(document.getElementById('productStock').value),
+                size: document.getElementById('productSize').value || null,
+                condition: document.getElementById('productCondition').value,
+                image: document.getElementById('productImage').value || 'placeholder.svg',
+                description: document.getElementById('productDescription').value || null
+            };
+            
+            try {
+                const url = isEdit 
+                    ? `${API_BASE_URL}/products/${productId}`
+                    : `${API_BASE_URL}/products`;
+                    
+                const method = isEdit ? 'PUT' : 'POST';
+                
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(productData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert(isEdit ? 'Cập nhật sản phẩm thành công!' : 'Thêm sản phẩm thành công!');
+                    closeProductModal();
+                    loadProductsTable(); // Reload table
+                } else {
+                    alert(data.message || 'Có lỗi xảy ra');
+                }
+            } catch (error) {
+                console.error('Error saving product:', error);
+                alert('Có lỗi xảy ra khi lưu sản phẩm');
+            }
+        });
+    }
+});
 
 async function deleteProduct(productId) {
     if (!confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
@@ -516,33 +645,57 @@ function viewOrder(orderId) {
     window.location.href = `order-detail.html?id=${orderId}`;
 }
 
-async function updateOrderStatus(orderId) {
-    const newStatus = prompt('Nhập trạng thái mới (pending/confirmed/shipping/delivered/cancelled):');
-    
-    if (!newStatus) return;
-    
-    try {
-        const response = await fetch(`${API_BASE_URL}/orders/${orderId}/status`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ status: newStatus })
-        });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            alert('Cập nhật trạng thái thành công!');
-            loadOrdersTable(); // Reload table
-        } else {
-            alert(data.message || 'Không thể cập nhật trạng thái');
-        }
-    } catch (error) {
-        console.error('Error updating order status:', error);
-        alert('Có lỗi xảy ra khi cập nhật trạng thái');
-    }
+function openOrderStatusModal(orderId, orderCode) {
+    document.getElementById('orderIdToUpdate').value = orderId;
+    document.getElementById('orderCodeDisplay').textContent = orderCode;
+    document.getElementById('orderStatusModal').classList.add('show');
 }
+
+function closeOrderStatusModal() {
+    document.getElementById('orderStatusModal').classList.remove('show');
+    document.getElementById('orderStatusForm').reset();
+}
+
+// Handle Order Status Form Submit
+document.addEventListener('DOMContentLoaded', function() {
+    const orderStatusForm = document.getElementById('orderStatusForm');
+    if (orderStatusForm) {
+        orderStatusForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const orderId = document.getElementById('orderIdToUpdate').value;
+            const newStatus = document.getElementById('orderStatus').value;
+            
+            if (!newStatus) {
+                alert('Vui lòng chọn trạng thái');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/orders/${orderId}/status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: newStatus })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Cập nhật trạng thái thành công!');
+                    closeOrderStatusModal();
+                    loadOrdersTable(); // Reload table
+                } else {
+                    alert(data.message || 'Không thể cập nhật trạng thái');
+                }
+            } catch (error) {
+                console.error('Error updating order status:', error);
+                alert('Có lỗi xảy ra khi cập nhật trạng thái');
+            }
+        });
+    }
+});
 
 // ============================================
 // Sidebar Navigation

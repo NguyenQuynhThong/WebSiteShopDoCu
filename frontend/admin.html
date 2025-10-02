@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - SecondShop</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin-modal.css">
 </head>
 <body class="admin-body">
     <!-- Admin Sidebar -->
@@ -100,7 +101,7 @@
         <section class="admin-section" id="products">
             <div class="section-header">
                 <h2>Quản Lý Sản Phẩm</h2>
-                <button class="btn-add">+ Thêm sản phẩm</button>
+                <button class="btn-add" onclick="openAddProductModal()">+ Thêm sản phẩm</button>
             </div>
 
             <div class="table-wrapper">
@@ -327,6 +328,133 @@
             </div>
         </section>
     </main>
+
+    <!-- Product Modal (Add/Edit) -->
+    <div id="productModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Thêm Sản Phẩm Mới</h3>
+                <span class="close-modal" onclick="closeProductModal()">&times;</span>
+            </div>
+            <form id="productForm" class="modal-form">
+                <input type="hidden" id="productId">
+                
+                <div class="form-group">
+                    <label for="productName">Tên sản phẩm *</label>
+                    <input type="text" id="productName" required placeholder="Nhập tên sản phẩm">
+                </div>
+
+                <div class="form-group">
+                    <label for="productCategory">Danh mục *</label>
+                    <select id="productCategory" required>
+                        <option value="">-- Chọn danh mục --</option>
+                        <option value="Áo Khoác">Áo Khoác</option>
+                        <option value="Áo Sơ Mi">Áo Sơ Mi</option>
+                        <option value="Quần">Quần</option>
+                        <option value="Váy">Váy</option>
+                        <option value="Điện Thoại">Điện Thoại</option>
+                        <option value="Laptop">Laptop</option>
+                        <option value="Tai Nghe">Tai Nghe</option>
+                        <option value="Phụ Kiện">Phụ Kiện</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productPrice">Giá bán *</label>
+                        <input type="number" id="productPrice" required placeholder="0" min="0" step="1000">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productStock">Số lượng *</label>
+                        <input type="number" id="productStock" required placeholder="0" min="0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="productSize">Kích thước</label>
+                    <input type="text" id="productSize" placeholder="S, M, L, XL hoặc để trống">
+                </div>
+
+                <div class="form-group">
+                    <label for="productCondition">Tình trạng</label>
+                    <select id="productCondition">
+                        <option value="excellent">Tuyệt vời (95-100%)</option>
+                        <option value="very-good">Rất tốt (85-94%)</option>
+                        <option value="good" selected>Tốt (75-84%)</option>
+                        <option value="fair">Khá (60-74%)</option>
+                        <option value="poor">Cần chú ý (<60%)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="productImage">Hình ảnh (URL hoặc tên file)</label>
+                    <input type="text" id="productImage" placeholder="vd: aokhoat1.jpg">
+                    <small>Để trống sẽ dùng ảnh mặc định</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="productDescription">Mô tả</label>
+                    <textarea id="productDescription" rows="4" placeholder="Mô tả chi tiết về sản phẩm..."></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeProductModal()">Hủy</button>
+                    <button type="submit" class="btn-submit">
+                        <span id="submitBtnText">Thêm Sản Phẩm</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Order Status Modal -->
+    <div id="orderStatusModal" class="modal" style="display: none;">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h3>Cập Nhật Trạng Thái Đơn Hàng</h3>
+                <span class="close-modal" onclick="closeOrderStatusModal()">&times;</span>
+            </div>
+            <form id="orderStatusForm" class="modal-form">
+                <input type="hidden" id="orderIdToUpdate">
+                
+                <div class="form-group">
+                    <label>Mã đơn hàng:</label>
+                    <p id="orderCodeDisplay" style="font-weight: bold;"></p>
+                </div>
+
+                <div class="form-group">
+                    <label for="orderStatus">Trạng thái mới *</label>
+                    <select id="orderStatus" required>
+                        <option value="">-- Chọn trạng thái --</option>
+                        <option value="pending">Chờ xác nhận</option>
+                        <option value="confirmed">Đã xác nhận</option>
+                        <option value="shipping">Đang giao hàng</option>
+                        <option value="delivered">Đã giao hàng</option>
+                        <option value="cancelled">Đã hủy</option>
+                    </select>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeOrderStatusModal()">Hủy</button>
+                    <button type="submit" class="btn-submit">Cập Nhật</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Customer Detail Modal -->
+    <div id="customerModal" class="modal" style="display: none;">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3>Thông Tin Chi Tiết Khách Hàng</h3>
+                <span class="close-modal" onclick="closeCustomerModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="customerDetailContent">
+                <div class="loading">Đang tải...</div>
+            </div>
+        </div>
+    </div>
 
     <!-- Admin JavaScript -->
     <script src="admin.js"></script>

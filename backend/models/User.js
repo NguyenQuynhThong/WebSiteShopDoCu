@@ -80,10 +80,24 @@ class User {
     // Lấy thông tin user theo ID
     static async getById(userId) {
         try {
-            const [rows] = await db.query(
-                'SELECT user_id, email, full_name, phone, role, status, created_at, last_login FROM users WHERE user_id = ?',
-                [userId]
-            );
+            const [rows] = await db.query(`
+                SELECT 
+                    u.user_id,
+                    u.email,
+                    u.full_name,
+                    u.phone,
+                    u.address,
+                    u.role,
+                    u.status,
+                    u.created_at,
+                    u.last_login,
+                    COUNT(DISTINCT o.order_id) as total_orders,
+                    COALESCE(SUM(o.total_amount), 0) as total_spent
+                FROM users u
+                LEFT JOIN orders o ON u.user_id = o.user_id
+                WHERE u.user_id = ?
+                GROUP BY u.user_id
+            `, [userId]);
 
             if (rows.length === 0) {
                 return { success: false, message: 'Không tìm thấy user' };
@@ -91,16 +105,7 @@ class User {
 
             return {
                 success: true,
-                user: {
-                    userId: rows[0].user_id,
-                    email: rows[0].email,
-                    fullName: rows[0].full_name,
-                    phone: rows[0].phone,
-                    role: rows[0].role,
-                    status: rows[0].status,
-                    createdAt: rows[0].created_at,
-                    lastLogin: rows[0].last_login
-                }
+                data: rows[0]
             };
         } catch (error) {
             console.error('Error in getById:', error);
