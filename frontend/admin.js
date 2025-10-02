@@ -266,6 +266,143 @@ async function loadCustomersTable() {
 }
 
 // ============================================
+// Load Statistics
+// ============================================
+async function loadStatistics() {
+    try {
+        console.log('📊 Loading statistics...');
+        
+        // Load orders data
+        const ordersRes = await fetch(`${API_BASE_URL}/orders`);
+        const ordersData = await ordersRes.json();
+        
+        if (!ordersData.success || !ordersData.orders) {
+            console.error('Failed to load orders for statistics');
+            return;
+        }
+        
+        const orders = ordersData.orders;
+        
+        // Calculate statistics for different periods
+        const now = new Date();
+        const stats = {
+            today: { revenue: 0, orders: 0 },
+            week: { revenue: 0, orders: 0 },
+            month: { revenue: 0, orders: 0 },
+            quarter: { revenue: 0, orders: 0 },
+            year: { revenue: 0, orders: 0 }
+        };
+        
+        orders.forEach(order => {
+            const orderDate = new Date(order.created_at);
+            const amount = parseFloat(order.total_amount) || 0;
+            
+            // Today
+            if (isSameDay(orderDate, now)) {
+                stats.today.revenue += amount;
+                stats.today.orders++;
+            }
+            
+            // Last 7 days
+            if (daysDiff(orderDate, now) <= 7) {
+                stats.week.revenue += amount;
+                stats.week.orders++;
+            }
+            
+            // Last 30 days
+            if (daysDiff(orderDate, now) <= 30) {
+                stats.month.revenue += amount;
+                stats.month.orders++;
+            }
+            
+            // Last 90 days
+            if (daysDiff(orderDate, now) <= 90) {
+                stats.quarter.revenue += amount;
+                stats.quarter.orders++;
+            }
+            
+            // This year
+            if (orderDate.getFullYear() === now.getFullYear()) {
+                stats.year.revenue += amount;
+                stats.year.orders++;
+            }
+        });
+        
+        // Update UI
+        updateStatisticsUI(stats);
+        
+        console.log('✅ Statistics loaded:', stats);
+        
+    } catch (error) {
+        console.error('Error loading statistics:', error);
+    }
+}
+
+function updateStatisticsUI(stats) {
+    // Update summary cards
+    const summaryCards = document.querySelectorAll('#statistics .summary-card');
+    
+    if (summaryCards[0]) {
+        const revenueValue = summaryCards[0].querySelector('.summary-value');
+        if (revenueValue) {
+            revenueValue.textContent = formatCurrency(stats.month.revenue);
+        }
+    }
+    
+    if (summaryCards[1]) {
+        const ordersValue = summaryCards[1].querySelector('.summary-value');
+        if (ordersValue) {
+            const avgPerDay = Math.round(stats.month.orders / 30);
+            ordersValue.textContent = `${avgPerDay} đơn`;
+        }
+    }
+    
+    if (summaryCards[2]) {
+        const avgOrderValue = summaryCards[2].querySelector('.summary-value');
+        if (avgOrderValue) {
+            const avg = stats.month.orders > 0 ? stats.month.revenue / stats.month.orders : 0;
+            avgOrderValue.textContent = formatCurrency(avg);
+        }
+    }
+}
+
+// Helper functions for date calculations
+function isSameDay(date1, date2) {
+    return date1.getFullYear() === date2.getFullYear() &&
+           date1.getMonth() === date2.getMonth() &&
+           date1.getDate() === date2.getDate();
+}
+
+function daysDiff(date1, date2) {
+    const diff = date2 - date1;
+    return Math.floor(diff / (1000 * 60 * 60 * 24));
+}
+
+// ============================================
+// Setup Statistics Filters
+// ============================================
+function setupStatisticsFilters() {
+    const filterBtns = document.querySelectorAll('#statistics .filter-btn');
+    
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Remove active class from all buttons
+            filterBtns.forEach(b => b.classList.remove('active'));
+            
+            // Add active class to clicked button
+            this.classList.add('active');
+            
+            // Get period from button text
+            const period = this.textContent.trim();
+            console.log('Filter changed to:', period);
+            
+            // Reload statistics with new filter
+            loadStatistics();
+        });
+    });
+}
+
+// ============================================
 // Customer Actions
 // ============================================
 function viewCustomerDetail(customerId) {
@@ -465,7 +602,13 @@ function setupSidebarNavigation() {
                     console.error('Customers section not found');
                 }
             } else if (target === 'statistics') {
-                alert('Chức năng thống kê đang được phát triển');
+                const targetSection = document.querySelector(`#${target}`);
+                if (targetSection) {
+                    targetSection.style.display = 'block';
+                    loadStatistics(); // Load statistics when viewing
+                } else {
+                    console.error('Statistics section not found');
+                }
             } else if (target === 'settings') {
                 alert('Chức năng cài đặt đang được phát triển');
             } else {
@@ -552,4 +695,7 @@ window.addEventListener('DOMContentLoaded', () => {
     loadCustomersTable();
     
     console.log('✅ Admin Dashboard initialized successfully');
+    
+    // Setup statistics filter buttons
+    setupStatisticsFilters();
 });
