@@ -92,12 +92,14 @@ const usersRoutes = require('./routes/users');
 const cartRoutes = require('./routes/cart');
 const ordersRoutes = require('./routes/orders');
 const paymentsRoutes = require('./routes/payments');
+const chatbotRoutes = require('./routes/chatbot');
 
 app.use('/api/products', productsRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', ordersRoutes);
 app.use('/api/payments', paymentsRoutes);
+app.use('/api/chatbot', chatbotRoutes);
 
 // =============================================
 // ERROR HANDLING

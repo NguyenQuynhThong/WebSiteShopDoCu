@@ -68,58 +68,11 @@ function updateCartCount() {
     });
 }
 
-// Initialize chatbot functionality
+// Initialize chatbot functionality  
 function initializeChatbot() {
-    const chatbotToggle = document.querySelector('.chatbot-toggle');
-    const chatbotWindow = document.querySelector('.chatbot-window');
-    const chatbotClose = document.querySelector('.chatbot-close');
-    const chatbotInput = document.querySelector('.chatbot-input input');
-    const btnSend = document.querySelector('.btn-send');
-    const chatbotMessages = document.querySelector('.chatbot-messages');
-
-    if (chatbotToggle && chatbotWindow) {
-        chatbotToggle.addEventListener('click', () => {
-            chatbotWindow.classList.toggle('hidden');
-        });
-
-        if (chatbotClose) {
-            chatbotClose.addEventListener('click', () => {
-                chatbotWindow.classList.add('hidden');
-            });
-        }
-
-        if (btnSend && chatbotInput && chatbotMessages) {
-            const sendMessage = () => {
-                const message = chatbotInput.value.trim();
-                if (message) {
-                    // Add user message
-                    const userMessage = document.createElement('div');
-                    userMessage.className = 'message user-message';
-                    userMessage.innerHTML = `<p>${message}</p>`;
-                    chatbotMessages.appendChild(userMessage);
-
-                    // Clear input
-                    chatbotInput.value = '';
-
-                    // Simulate bot response
-                    setTimeout(() => {
-                        const botMessage = document.createElement('div');
-                        botMessage.className = 'message bot-message';
-                        botMessage.innerHTML = `<p>Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất.</p>`;
-                        chatbotMessages.appendChild(botMessage);
-                        chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-                    }, 1000);
-
-                    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-                }
-            };
-
-            btnSend.addEventListener('click', sendMessage);
-            chatbotInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') sendMessage();
-            });
-        }
-    }
+    // Chatbot được khởi tạo bởi chatbot.js
+    // Chỉ cần đợi component load xong
+    console.log('Chatbot component loaded');
 }
 
 // Initialize search functionality

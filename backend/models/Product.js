@@ -37,13 +37,13 @@ class Product {
             `;
             const params = [];
 
-            if (category && category !== 'all') {
-                // Map frontend category names to database category names
-                const categoryMapping = {
-                    'clothing': ['Áo Khoác', 'Áo Sơ Mi', 'Quần', 'Váy'],
-                    'tech': ['Điện Thoại', 'Laptop', 'Tai Nghe', 'Phụ Kiện']
-                };
+            // Map frontend category names to database category names
+            const categoryMapping = {
+                'clothing': ['Áo Khoác', 'Áo Sơ Mi', 'Quần', 'Váy'],
+                'tech': ['Điện Thoại', 'Laptop', 'Tai Nghe', 'Phụ Kiện']
+            };
 
+            if (category && category !== 'all') {
                 if (categoryMapping[category]) {
                     const categoryNames = categoryMapping[category];
                     const placeholders = categoryNames.map(() => '?').join(',');
