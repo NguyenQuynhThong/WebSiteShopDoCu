@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - SecondShop</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <div class="auth-header">
+                <h1>SecondShop</h1>
+                <h2>Đăng Nhập</h2>
+                <p>Chào mừng bạn quay trở lại!</p>
+            </div>
+
+            <form class="auth-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="example@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mật khẩu</label>
+                    <input type="password" id="password" placeholder="Nhập mật khẩu" required>
+                </div>
+
+                <div class="form-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox">
+                        <span>Ghi nhớ đăng nhập</span>
+                    </label>
+                    <a href="#" class="forgot-link">Quên mật khẩu?</a>
+                </div>
+
+                <button type="submit" class="btn-submit">Đăng nhập</button>
+
+                <div class="divider">
+                    <span>hoặc</span>
+                </div>
+
+                <button type="button" class="btn-social btn-google">
+                    Đăng nhập bằng Google
+                </button>
+
+                <button type="button" class="btn-social btn-facebook">
+                    Đăng nhập bằng Facebook
+                </button>
+
+                <div class="auth-footer">
+                    <p>Chưa có tài khoản? <a href="register.html">Đăng ký ngay</a></p>
+                    <a href="index.html" class="back-home">Quay về trang chủ</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script src="login.js"></script>
+</body>
+</html>

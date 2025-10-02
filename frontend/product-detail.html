@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết sản phẩm - SecondShop</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header Component -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Navigation Component -->
+    <div id="nav-placeholder"></div>
+
+    <!-- Breadcrumb -->
+    <section class="breadcrumb">
+        <div class="container">
+            <ul class="breadcrumb-list">
+                <li><a href="index.html">Trang chủ</a></li>
+                <li><a href="products.html">Sản phẩm</a></li>
+                <li><a href="#">Quần áo</a></li>
+                <li class="active">Áo Thun Nam Basic</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Product Detail Section -->
+    <section class="product-detail">
+        <div class="container">
+            <div class="product-detail-layout">
+                <!-- Product Images -->
+                <div class="product-images">
+                    <div class="main-image">
+                        <img id="mainProductImage" src="https://images.pexels.com/photos/1126993/pexels-photo-1126993.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Áo thun nam">
+                        <span class="badge-detail sale">-30%</span>
+                    </div>
+                    <div class="thumbnail-list">
+                        <img src="https://images.pexels.com/photos/1126993/pexels-photo-1126993.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Thumbnail 1" class="thumbnail active" onclick="changeImage(this)">
+                        <img src="https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Thumbnail 2" class="thumbnail" onclick="changeImage(this)">
+                        <img src="https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Thumbnail 3" class="thumbnail" onclick="changeImage(this)">
+                        <img src="https://images.pexels.com/photos/1598508/pexels-photo-1598508.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Thumbnail 4" class="thumbnail" onclick="changeImage(this)">
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info-detail">
+                    <h1 class="product-title">Áo Thun Nam Basic</h1>
+                    
+                    <div class="product-rating">
+                        <div class="stars">
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star filled">★</span>
+                            <span class="star half">★</span>
+                        </div>
+                        <span class="rating-count">(4.5/5 - 128 đánh giá)</span>
+                    </div>
+
+                    <div class="product-price-detail">
+                        <span class="price-current-detail">150,000₫</span>
+                        <span class="price-old-detail">200,000₫</span>
+                        <span class="discount-badge">-30%</span>
+                    </div>
+
+                    <div class="product-status">
+                        <div class="status-item">
+                            <span class="status-label">Tình trạng:</span>
+                            <span class="status-value success">90% - Còn mới</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Kho:</span>
+                            <span class="status-value stock stock-status">Đang tải...</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Danh mục:</span>
+                            <span class="status-value">Quần áo nam</span>
+                        </div>
+                    </div>
+
+                    <div class="product-options">
+                        <div class="option-group">
+                            <label class="option-label">Kích thước:</label>
+                            <div class="size-options">
+                                <button class="size-btn">S</button>
+                                <button class="size-btn active">M</button>
+                                <button class="size-btn">L</button>
+                                <button class="size-btn">XL</button>
+                                <button class="size-btn" disabled>XXL</button>
+                            </div>
+                        </div>
+
+                        <div class="option-group">
+                            <label class="option-label">Màu sắc:</label>
+                            <div class="color-options">
+                                <button class="color-btn active" style="background: #000;" title="Đen"></button>
+                                <button class="color-btn" style="background: #fff; border: 1px solid #ddd;" title="Trắng"></button>
+                                <button class="color-btn" style="background: #808080;" title="Xám"></button>
+                                <button class="color-btn" style="background: #000080;" title="Navy"></button>
+                            </div>
+                        </div>
+
+                        <div class="option-group">
+                            <label class="option-label">Số lượng:</label>
+                            <div class="quantity-selector">
+                                <button class="qty-btn" onclick="decreaseQuantity()">-</button>
+                                <input type="number" id="quantity" value="1" min="1" max="15">
+                                <button class="qty-btn" onclick="increaseQuantity()">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-actions">
+                        <button class="btn-add-to-cart">
+                            <span>🛒</span> Thêm vào giỏ hàng
+                        </button>
+                        <button class="btn-buy-now">
+                            Mua ngay
+                        </button>
+                        <button class="btn-wishlist">
+                            <span>♡</span>
+                        </button>
+                    </div>
+
+                    <div class="product-features">
+                        <div class="feature-item">
+                            <span class="feature-icon">🚚</span>
+                            <div class="feature-text">
+                                <strong>Miễn phí vận chuyển</strong>
+                                <p>Cho đơn hàng trên 500.000₫</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">↩️</span>
+                            <div class="feature-text">
+                                <strong>Đổi trả trong 7 ngày</strong>
+                                <p>Nếu sản phẩm lỗi</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <div class="feature-text">
+                                <strong>Chính hãng 100%</strong>
+                                <p>Cam kết chất lượng</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-share">
+                        <span>Chia sẻ:</span>
+                        <a href="#" class="share-btn facebook">Facebook</a>
+                        <a href="#" class="share-btn twitter">Twitter</a>
+                        <a href="#" class="share-btn pinterest">Pinterest</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Tabs -->
+    <section class="product-tabs">
+        <div class="container">
+            <div class="tabs-header">
+                <button class="tab-btn active" onclick="switchTab('description')">Mô tả</button>
+                <button class="tab-btn" onclick="switchTab('specifications')">Thông số</button>
+                <button class="tab-btn" onclick="switchTab('reviews')">Đánh giá (128)</button>
+            </div>
+
+            <div class="tabs-content">
+                <!-- Description Tab -->
+                <div id="description" class="tab-panel active">
+                    <h3>Mô tả sản phẩm</h3>
+                    <p>Áo thun nam basic là món đồ không thể thiếu trong tủ đồ của mọi chàng trai. Với chất liệu cotton 100% cao cấp, áo mang lại cảm giác thoải mái, thoáng mát khi mặc.</p>
+                    
+                    <h4>Đặc điểm nổi bật:</h4>
+                    <ul>
+                        <li>Chất liệu: Cotton 100% cao cấp, thấm hút mồ hôi tốt</li>
+                        <li>Form dáng: Regular fit, phù hợp với nhiều vóc dáng</li>
+                        <li>Thiết kế: Cổ tròn, tay ngắn đơn giản, dễ phối đồ</li>
+                        <li>Màu sắc: Đa dạng các màu cơ bản dễ mix & match</li>
+                        <li>Tình trạng: 90% - Đã qua sử dụng nhưng vẫn rất mới</li>
+                    </ul>
+
+                    <h4>Hướng dẫn bảo quản:</h4>
+                    <ul>
+                        <li>Giặt máy ở nhiệt độ thường, không dùng chất tẩy mạnh</li>
+                        <li>Phơi ở nơi thoáng mát, tránh ánh nắng trực tiếp</li>
+                        <li>Là ở nhiệt độ thấp nếu cần</li>
+                        <li>Không ngâm lâu trong nước</li>
+                    </ul>
+                </div>
+
+                <!-- Specifications Tab -->
+                <div id="specifications" class="tab-panel">
+                    <h3>Thông số kỹ thuật</h3>
+                    <table class="specs-table">
+                        <tr>
+                            <td>Chất liệu</td>
+                            <td>Cotton 100%</td>
+                        </tr>
+                        <tr>
+                            <td>Xuất xứ</td>
+                            <td>Việt Nam</td>
+                        </tr>
+                        <tr>
+                            <td>Form dáng</td>
+                            <td>Regular Fit</td>
+                        </tr>
+                        <tr>
+                            <td>Kiểu cổ</td>
+                            <td>Cổ tròn</td>
+                        </tr>
+                        <tr>
+                            <td>Kiểu tay</td>
+                            <td>Tay ngắn</td>
+                        </tr>
+                        <tr>
+                            <td>Tình trạng</td>
+                            <td>90% - Còn rất mới</td>
+                        </tr>
+                        <tr>
+                            <td>Size có sẵn</td>
+                            <td>S, M, L, XL</td>
+                        </tr>
+                        <tr>
+                            <td>Màu sắc</td>
+                            <td>Đen, Trắng, Xám, Navy</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Reviews Tab -->
+                <div id="reviews" class="tab-panel">
+                    <h3>Đánh giá từ khách hàng</h3>
+                    
+                    <div class="reviews-summary">
+                        <div class="rating-overview">
+                            <div class="rating-score">4.5</div>
+                            <div class="rating-stars">
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star filled">★</span>
+                                <span class="star half">★</span>
+                            </div>
+                            <div class="rating-total">128 đánh giá</div>
+                        </div>
+                        
+                        <div class="rating-breakdown">
+                            <div class="rating-bar">
+                                <span>5★</span>
+                                <div class="bar"><div class="fill" style="width: 70%"></div></div>
+                                <span>90</span>
+                            </div>
+                            <div class="rating-bar">
+                                <span>4★</span>
+                                <div class="bar"><div class="fill" style="width: 20%"></div></div>
+                                <span>25</span>
+                            </div>
+                            <div class="rating-bar">
+                                <span>3★</span>
+                                <div class="bar"><div class="fill" style="width: 7%"></div></div>
+                                <span>9</span>
+                            </div>
+                            <div class="rating-bar">
+                                <span>2★</span>
+                                <div class="bar"><div class="fill" style="width: 2%"></div></div>
+                                <span>3</span>
+                            </div>
+                            <div class="rating-bar">
+                                <span>1★</span>
+                                <div class="bar"><div class="fill" style="width: 1%"></div></div>
+                                <span>1</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="reviews-list">
+                        <div class="review-item">
+                            <div class="review-header">
+                                <div class="reviewer-info">
+                                    <div class="reviewer-avatar">N</div>
+                                    <div class="reviewer-details">
+                                        <h4>Nguyễn Văn A</h4>
+                                        <div class="review-stars">
+                                            <span class="star filled">★★★★★</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="review-date">2 ngày trước</span>
+                            </div>
+                            <div class="review-content">
+                                <p>Áo rất đẹp, chất lượng tốt. Mặc rất thoải mái và form chuẩn. Giá cả hợp lý, ship hàng nhanh. Sẽ tiếp tục ủng hộ shop!</p>
+                            </div>
+                        </div>
+
+                        <div class="review-item">
+                            <div class="review-header">
+                                <div class="reviewer-info">
+                                    <div class="reviewer-avatar">T</div>
+                                    <div class="reviewer-details">
+                                        <h4>Trần Thị B</h4>
+                                        <div class="review-stars">
+                                            <span class="star filled">★★★★</span>
+                                            <span class="star">★</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="review-date">5 ngày trước</span>
+                            </div>
+                            <div class="review-content">
+                                <p>Áo đẹp, chất vải mát. Tuy nhiên size hơi nhỏ so với mô tả. Nên order lên 1 size để thoải mái hơn.</p>
+                            </div>
+                        </div>
+
+                        <div class="review-item">
+                            <div class="review-header">
+                                <div class="reviewer-info">
+                                    <div class="reviewer-avatar">L</div>
+                                    <div class="reviewer-details">
+                                        <h4>Lê Minh C</h4>
+                                        <div class="review-stars">
+                                            <span class="star filled">★★★★★</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="review-date">1 tuần trước</span>
+                            </div>
+                            <div class="review-content">
+                                <p>Sản phẩm chất lượng, giá tốt. Đóng gói cẩn thận. Shop phục vụ nhiệt tình. Recommend!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn-load-more">Xem thêm đánh giá</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Products -->
+    <section class="related-products">
+        <div class="container">
+            <h2 class="section-title">Sản Phẩm Gợi Ý</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.pexels.com/photos/1055691/pexels-photo-1055691.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Quần jean">
+                        <span class="badge">Hot</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Quần Jean Slim Fit</h3>
+                        <p class="product-desc">Tình trạng: 85% - Size 29, 30</p>
+                        <div class="product-price">
+                            <span class="price-current">250,000₫</span>
+                        </div>
+                        <button class="btn-add-cart">Thêm vào giỏ</button>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.pexels.com/photos/1103830/pexels-photo-1103830.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Áo sơ mi">
+                    </div>
+                    <div class="product-info">
+                        <h3>Áo Sơ Mi Trắng</h3>
+                        <p class="product-desc">Tình trạng: 95% - Size M</p>
+                        <div class="product-price">
+                            <span class="price-current">180,000₫</span>
+                        </div>
+                        <button class="btn-add-cart">Thêm vào giỏ</button>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.pexels.com/photos/1374510/pexels-photo-1374510.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Áo khoác">
+                        <span class="badge">-20%</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Áo Khoác Jean</h3>
+                        <p class="product-desc">Tình trạng: 88% - Size L</p>
+                        <div class="product-price">
+                            <span class="price-current">350,000₫</span>
+                            <span class="price-old">437,500₫</span>
+                        </div>
+                        <button class="btn-add-cart">Thêm vào giỏ</button>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.pexels.com/photos/934070/pexels-photo-934070.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Áo polo">
+                        <span class="badge">New</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Áo Polo Nam</h3>
+                        <p class="product-desc">Tình trạng: 92% - Size M, L, XL</p>
+                        <div class="product-price">
+                            <span class="price-current">170,000₫</span>
+                        </div>
+                        <button class="btn-add-cart">Thêm vào giỏ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Component -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Chatbot Widget Component -->
+    <div id="chatbot-placeholder"></div>
+
+    <!-- Load Components -->
+    <script src="components/loader.js"></script>
+    <script src="product-detail.js"></script>
+</body>
+</html>

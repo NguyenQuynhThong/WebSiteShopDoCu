@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - SecondShop</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-body">
+    <!-- Admin Sidebar -->
+    <aside class="admin-sidebar">
+        <div class="sidebar-header">
+            <h2>SecondShop</h2>
+            <p>Admin Panel</p>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#dashboard" class="sidebar-link active">
+                <span class="icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="#products" class="sidebar-link">
+                <span class="icon">📦</span>
+                <span>Quản lý sản phẩm</span>
+            </a>
+            <a href="#orders" class="sidebar-link">
+                <span class="icon">🛒</span>
+                <span>Đơn hàng</span>
+            </a>
+            <a href="#customers" class="sidebar-link">
+                <span class="icon">👥</span>
+                <span>Khách hàng</span>
+            </a>
+            <a href="#statistics" class="sidebar-link">
+                <span class="icon">📈</span>
+                <span>Thống kê</span>
+            </a>
+            <a href="#settings" class="sidebar-link">
+                <span class="icon">⚙️</span>
+                <span>Cài đặt</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="index.html" class="btn-logout">Đăng xuất</a>
+        </div>
+    </aside>
+
+    <!-- Admin Main Content -->
+    <main class="admin-main">
+        <!-- Top Bar -->
+        <header class="admin-header">
+            <h1>Dashboard</h1>
+            <div class="admin-user">
+                <span>Admin User</span>
+                <div class="user-avatar">A</div>
+            </div>
+        </header>
+
+        <!-- Dashboard Stats -->
+        <section class="dashboard-stats">
+            <div class="stat-card">
+                <div class="stat-icon blue">💰</div>
+                <div class="stat-info">
+                    <h3>Doanh thu hôm nay</h3>
+                    <p class="stat-value">45,500,000₫</p>
+                    <span class="stat-change positive">+12% so với hôm qua</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon green">🛍️</div>
+                <div class="stat-info">
+                    <h3>Đơn hàng mới</h3>
+                    <p class="stat-value">127</p>
+                    <span class="stat-change positive">+8% so với hôm qua</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon orange">📦</div>
+                <div class="stat-info">
+                    <h3>Tổng sản phẩm</h3>
+                    <p class="stat-value">892</p>
+                    <span class="stat-change neutral">Không đổi</span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon purple">👥</div>
+                <div class="stat-info">
+                    <h3>Khách hàng mới</h3>
+                    <p class="stat-value">34</p>
+                    <span class="stat-change positive">+5% so với hôm qua</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Management -->
+        <section class="admin-section" id="products">
+            <div class="section-header">
+                <h2>Quản Lý Sản Phẩm</h2>
+                <button class="btn-add">+ Thêm sản phẩm</button>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Hình ảnh</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Danh mục</th>
+                            <th>Giá</th>
+                            <th>Tồn kho</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#001</td>
+                            <td><img src="https://images.pexels.com/photos/1126993/pexels-photo-1126993.jpeg?auto=compress&cs=tinysrgb&w=50" alt="Product" class="table-img"></td>
+                            <td>Áo Thun Nam Basic</td>
+                            <td>Quần áo</td>
+                            <td>150,000₫</td>
+                            <td>25</td>
+                            <td><span class="badge-status active">Đang bán</span></td>
+                            <td>
+                                <button class="btn-action edit">Sửa</button>
+                                <button class="btn-action delete">Xóa</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#002</td>
+                            <td><img src="https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=50" alt="Product" class="table-img"></td>
+                            <td>Macbook Pro 2019</td>
+                            <td>Công nghệ</td>
+                            <td>15,000,000₫</td>
+                            <td>8</td>
+                            <td><span class="badge-status active">Đang bán</span></td>
+                            <td>
+                                <button class="btn-action edit">Sửa</button>
+                                <button class="btn-action delete">Xóa</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#003</td>
+                            <td><img src="https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?auto=compress&cs=tinysrgb&w=50" alt="Product" class="table-img"></td>
+                            <td>iPhone 11 Pro</td>
+                            <td>Công nghệ</td>
+                            <td>8,500,000₫</td>
+                            <td>12</td>
+                            <td><span class="badge-status active">Đang bán</span></td>
+                            <td>
+                                <button class="btn-action edit">Sửa</button>
+                                <button class="btn-action delete">Xóa</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#004</td>
+                            <td><img src="https://images.pexels.com/photos/1055691/pexels-photo-1055691.jpeg?auto=compress&cs=tinysrgb&w=50" alt="Product" class="table-img"></td>
+                            <td>Quần Jean Slim Fit</td>
+                            <td>Quần áo</td>
+                            <td>250,000₫</td>
+                            <td>0</td>
+                            <td><span class="badge-status inactive">Hết hàng</span></td>
+                            <td>
+                                <button class="btn-action edit">Sửa</button>
+                                <button class="btn-action delete">Xóa</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Orders Management -->
+        <section class="admin-section" id="orders">
+            <div class="section-header">
+                <h2>Đơn Hàng Gần Đây</h2>
+                <button class="btn-filter">Lọc</button>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Mã đơn</th>
+                            <th>Khách hàng</th>
+                            <th>Ngày đặt</th>
+                            <th>Tổng tiền</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#ORD001</td>
+                            <td>Nguyễn Văn A</td>
+                            <td>01/10/2025</td>
+                            <td>15,150,000₫</td>
+                            <td><span class="badge-status pending">Đang xử lý</span></td>
+                            <td>
+                                <button class="btn-action view">Xem</button>
+                                <button class="btn-action edit">Cập nhật</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#ORD002</td>
+                            <td>Trần Thị B</td>
+                            <td>01/10/2025</td>
+                            <td>8,550,000₫</td>
+                            <td><span class="badge-status shipped">Đang giao</span></td>
+                            <td>
+                                <button class="btn-action view">Xem</button>
+                                <button class="btn-action edit">Cập nhật</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#ORD003</td>
+                            <td>Lê Văn C</td>
+                            <td>30/09/2025</td>
+                            <td>300,000₫</td>
+                            <td><span class="badge-status completed">Hoàn thành</span></td>
+                            <td>
+                                <button class="btn-action view">Xem</button>
+                                <button class="btn-action edit">Cập nhật</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>#ORD004</td>
+                            <td>Phạm Thị D</td>
+                            <td>30/09/2025</td>
+                            <td>12,050,000₫</td>
+                            <td><span class="badge-status completed">Hoàn thành</span></td>
+                            <td>
+                                <button class="btn-action view">Xem</button>
+                                <button class="btn-action edit">Cập nhật</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Statistics -->
+        <section class="admin-section" id="statistics">
+            <h2>Thống Kê Doanh Thu</h2>
+
+            <div class="stats-filter">
+                <button class="filter-btn active">7 ngày</button>
+                <button class="filter-btn">30 ngày</button>
+                <button class="filter-btn">3 tháng</button>
+                <button class="filter-btn">1 năm</button>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-placeholder">
+                    <p>📊 Biểu đồ doanh thu theo thời gian</p>
+                    <div class="chart-bars">
+                        <div class="bar" style="height: 60%"><span>T2</span></div>
+                        <div class="bar" style="height: 75%"><span>T3</span></div>
+                        <div class="bar" style="height: 45%"><span>T4</span></div>
+                        <div class="bar" style="height: 90%"><span>T5</span></div>
+                        <div class="bar" style="height: 70%"><span>T6</span></div>
+                        <div class="bar" style="height: 95%"><span>T7</span></div>
+                        <div class="bar" style="height: 85%"><span>CN</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-summary">
+                <div class="summary-card">
+                    <h4>Tổng doanh thu tháng này</h4>
+                    <p class="summary-value">245,750,000₫</p>
+                    <span class="summary-trend positive">+18% so với tháng trước</span>
+                </div>
+
+                <div class="summary-card">
+                    <h4>Đơn hàng trung bình/ngày</h4>
+                    <p class="summary-value">42 đơn</p>
+                    <span class="summary-trend positive">+5% so với tháng trước</span>
+                </div>
+
+                <div class="summary-card">
+                    <h4>Giá trị đơn hàng TB</h4>
+                    <p class="summary-value">1,950,000₫</p>
+                    <span class="summary-trend negative">-3% so với tháng trước</span>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

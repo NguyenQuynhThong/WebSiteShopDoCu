@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Đơn Hàng - LAG Vintage Shop</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .order-detail-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        
+        .order-header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .order-header h1 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .order-code {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .order-status-bar {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .status-badge.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-badge.processing {
+            background: #cce5ff;
+            color: #004085;
+        }
+        
+        .status-badge.shipping {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .status-badge.delivered {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-badge.cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-badge.paid {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .order-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+        
+        .order-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .order-section h3 {
+            margin-bottom: 20px;
+            color: #333;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .order-items {
+            margin-bottom: 20px;
+        }
+        
+        .order-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            border: 1px solid #f0f0f0;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .order-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        
+        .order-item-info {
+            flex: 1;
+        }
+        
+        .order-item-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .order-item-price {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .order-item-quantity {
+            color: #999;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .order-item-subtotal {
+            font-weight: 600;
+            color: #e53935;
+            text-align: right;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            color: #333;
+            font-weight: 500;
+            text-align: right;
+        }
+        
+        .total-row {
+            padding-top: 15px;
+            border-top: 2px solid #333;
+            margin-top: 15px;
+        }
+        
+        .total-row .info-label {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .total-row .info-value {
+            font-size: 20px;
+            color: #e53935;
+        }
+        
+        .customer-info p {
+            margin-bottom: 10px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .customer-info strong {
+            color: #333;
+            display: inline-block;
+            min-width: 120px;
+        }
+        
+        .order-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #1976d2;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #1565c0;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 20px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -30px;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4CAF50;
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px #4CAF50;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 12px;
+            width: 2px;
+            height: calc(100% - 12px);
+            background: #ddd;
+        }
+        
+        .timeline-item:last-child::after {
+            display: none;
+        }
+        
+        .timeline-item.inactive::before {
+            background: #ddd;
+            box-shadow: 0 0 0 2px #ddd;
+        }
+        
+        .timeline-date {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .timeline-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .timeline-desc {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .order-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .order-detail-container {
+                margin: 20px auto;
+            }
+            
+            .order-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Component -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Navigation Component -->
+    <div id="nav-placeholder"></div>
+
+    <!-- Order Detail Content -->
+    <div class="order-detail-container">
+        <div id="loadingSection" class="loading">
+            <p>Đang tải thông tin đơn hàng...</p>
+        </div>
+        
+        <div id="orderContent" style="display: none;">
+            <!-- Order Header -->
+            <div class="order-header">
+                <h1>Chi Tiết Đơn Hàng</h1>
+                <div class="order-code" id="orderCode">Mã đơn hàng: #...</div>
+                <div class="order-status-bar">
+                    <span class="status-badge" id="orderStatus">...</span>
+                    <span class="status-badge" id="paymentStatus">...</span>
+                </div>
+                <div class="order-actions">
+                    <button class="btn btn-primary" id="trackOrderBtn" style="display: none;">
+                        📦 Theo dõi đơn hàng
+                    </button>
+                    <button class="btn btn-danger" id="cancelOrderBtn" style="display: none;">
+                        ❌ Hủy đơn hàng
+                    </button>
+                    <button class="btn btn-success" id="reorderBtn">
+                        🔄 Đặt lại đơn hàng
+                    </button>
+                    <button class="btn btn-secondary" onclick="window.location.href='my-orders.html'">
+                        📋 Đơn hàng của tôi
+                    </button>
+                </div>
+            </div>
+            
+            <div class="order-content">
+                <!-- Left Column -->
+                <div>
+                    <!-- Order Items -->
+                    <div class="order-section">
+                        <h3>Sản Phẩm Đã Đặt</h3>
+                        <div class="order-items" id="orderItems">
+                            <!-- Items will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Customer Info -->
+                    <div class="order-section">
+                        <h3>Thông Tin Khách Hàng</h3>
+                        <div class="customer-info" id="customerInfo">
+                            <!-- Customer info will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Order Timeline -->
+                    <div class="order-section">
+                        <h3>Lịch Sử Đơn Hàng</h3>
+                        <div class="timeline" id="orderTimeline">
+                            <!-- Timeline will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column -->
+                <div>
+                    <!-- Order Summary -->
+                    <div class="order-section">
+                        <h3>Tổng Quan Đơn Hàng</h3>
+                        <div class="info-row">
+                            <span class="info-label">Ngày đặt hàng:</span>
+                            <span class="info-value" id="orderDate">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Phương thức thanh toán:</span>
+                            <span class="info-value" id="paymentMethod">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Tổng tiền hàng:</span>
+                            <span class="info-value" id="subtotal">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Phí vận chuyển:</span>
+                            <span class="info-value" id="shippingFee">-</span>
+                        </div>
+                        <div class="info-row total-row">
+                            <span class="info-label">Tổng thanh toán:</span>
+                            <span class="info-value" id="totalAmount">-</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Payment Info -->
+                    <div class="order-section" id="paymentInfoSection" style="display: none;">
+                        <h3>Thông Tin Thanh Toán</h3>
+                        <div id="paymentInfo">
+                            <!-- Payment info will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Component -->
+    <div id="footer-placeholder"></div>
+
+    <script src="components/loader.js"></script>
+    <script src="order-detail.js"></script>
+</body>
+</html>
