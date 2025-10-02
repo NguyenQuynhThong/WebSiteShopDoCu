@@ -50,8 +50,9 @@ function loadAdminSettings() {
     document.getElementById('shopDescription').value = 'Cửa hàng chuyên bán đồ cũ vintage chất lượng cao';
 }
 
-// Handle Admin Profile Update
-document.addEventListener('DOMContentLoaded', function() {
+// Setup Settings Form Handlers
+function setupSettingsHandlers() {
+    // Handle Admin Profile Update
     const adminProfileForm = document.getElementById('adminProfileForm');
     if (adminProfileForm) {
         adminProfileForm.addEventListener('submit', async function(e) {
@@ -89,10 +90,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-});
 
-// Handle Change Password
-document.addEventListener('DOMContentLoaded', function() {
+    // Handle Change Password
     const changePasswordForm = document.getElementById('changePasswordForm');
     if (changePasswordForm) {
         changePasswordForm.addEventListener('submit', async function(e) {
@@ -140,10 +139,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-});
 
-// Handle Shop Info Update
-document.addEventListener('DOMContentLoaded', function() {
+    // Handle Shop Info Update
     const shopInfoForm = document.getElementById('shopInfoForm');
     if (shopInfoForm) {
         shopInfoForm.addEventListener('submit', function(e) {
@@ -164,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('✅ Lưu thông tin cửa hàng thành công!');
         });
     }
-});
+}
 
 // Database Actions
 function backupDatabase() {
@@ -1040,6 +1037,9 @@ window.addEventListener('DOMContentLoaded', () => {
     
     console.log('⚙️ Loading settings...');
     loadAdminSettings();
+    
+    console.log('🔧 Setting up form handlers...');
+    setupSettingsHandlers();
     
     console.log('✅ Admin Dashboard initialized successfully');
     
