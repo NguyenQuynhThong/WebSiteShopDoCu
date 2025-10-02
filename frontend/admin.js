@@ -530,8 +530,8 @@ function editProduct(productId) {
     fetch(`${API_BASE_URL}/products/${productId}`)
         .then(res => res.json())
         .then(data => {
-            if (data.success && data.product) {
-                const product = data.product;
+            if (data.success && data.data) {
+                const product = data.data;
                 
                 // Fill form with product data
                 document.getElementById('modalTitle').textContent = 'Sửa Sản Phẩm';
