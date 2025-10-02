@@ -83,6 +83,27 @@ router.get('/my-orders', requireAuth, async (req, res) => {
 });
 
 // =============================================
+// Lấy TẤT CẢ đơn hàng (Admin)
+// =============================================
+router.get('/', async (req, res) => {
+    try {
+        const result = await Order.getAllOrders();
+        
+        if (result.success) {
+            res.json(result);
+        } else {
+            res.status(400).json(result);
+        }
+    } catch (error) {
+        console.error('Get all orders error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Lỗi server'
+        });
+    }
+});
+
+// =============================================
 // Lấy chi tiết đơn hàng
 // =============================================
 router.get('/:orderId', requireAuth, async (req, res) => {

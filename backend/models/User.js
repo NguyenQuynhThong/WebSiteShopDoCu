@@ -150,6 +150,38 @@ class User {
             return { success: false, message: error.message };
         }
     }
+
+    // Lấy tất cả khách hàng (Admin)
+    static async getAllCustomers() {
+        try {
+            const [customers] = await db.query(`
+                SELECT 
+                    u.user_id,
+                    u.email,
+                    u.full_name,
+                    u.phone,
+                    u.role,
+                    u.status,
+                    u.created_at,
+                    u.last_login,
+                    COUNT(DISTINCT o.order_id) as total_orders,
+                    COALESCE(SUM(o.total_amount), 0) as total_spent
+                FROM users u
+                LEFT JOIN orders o ON u.user_id = o.user_id
+                WHERE u.role = 'customer'
+                GROUP BY u.user_id, u.email, u.full_name, u.phone, u.role, u.status, u.created_at, u.last_login
+                ORDER BY u.created_at DESC
+            `);
+
+            return {
+                success: true,
+                customers: customers
+            };
+        } catch (error) {
+            console.error('Error in getAllCustomers:', error);
+            return { success: false, message: error.message };
+        }
+    }
 }
 
 module.exports = User;

@@ -50,6 +50,77 @@ router.get('/search', async (req, res) => {
     }
 });
 
+// POST /api/products - Tạo sản phẩm mới (Admin)
+router.post('/', async (req, res) => {
+    try {
+        const productData = req.body;
+        
+        // Validation
+        if (!productData.name || !productData.price || !productData.category) {
+            return res.status(400).json({
+                success: false,
+                message: 'Vui lòng điền đầy đủ thông tin sản phẩm'
+            });
+        }
+        
+        const result = await Product.create(productData);
+        
+        if (result.success) {
+            res.status(201).json(result);
+        } else {
+            res.status(400).json(result);
+        }
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Lỗi server',
+            error: error.message
+        });
+    }
+});
+
+// PUT /api/products/:id - Cập nhật sản phẩm (Admin)
+router.put('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const productData = req.body;
+        
+        const result = await Product.update(id, productData);
+        
+        if (result.success) {
+            res.json(result);
+        } else {
+            res.status(400).json(result);
+        }
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Lỗi server',
+            error: error.message
+        });
+    }
+});
+
+// DELETE /api/products/:id - Xóa sản phẩm (Admin)
+router.delete('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await Product.delete(id);
+        
+        if (result.success) {
+            res.json(result);
+        } else {
+            res.status(400).json(result);
+        }
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Lỗi server',
+            error: error.message
+        });
+    }
+});
+
 // GET /api/products/:id - Lấy chi tiết sản phẩm
 router.get('/:id', async (req, res) => {
     try {

@@ -77,6 +77,25 @@ router.post('/login', async (req, res) => {
     }
 });
 
+// Lấy danh sách tất cả khách hàng (Admin)
+router.get('/', async (req, res) => {
+    try {
+        const result = await User.getAllCustomers();
+        
+        if (result.success) {
+            res.json(result);
+        } else {
+            res.status(500).json(result);
+        }
+    } catch (error) {
+        console.error('Get all customers error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Lỗi server'
+        });
+    }
+});
+
 // Lấy thông tin user
 router.get('/:userId', async (req, res) => {
     try {

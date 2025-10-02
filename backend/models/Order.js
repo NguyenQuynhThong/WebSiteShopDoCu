@@ -166,6 +166,47 @@ class Order {
             };
         }
     }
+
+    // =============================================
+    // Lấy TẤT CẢ đơn hàng (Admin)
+    // =============================================
+    static async getAllOrders() {
+        try {
+            const [orders] = await db.query(`
+                SELECT 
+                    o.order_id,
+                    o.order_code,
+                    o.customer_name as full_name,
+                    o.customer_email,
+                    o.customer_phone,
+                    o.shipping_address,
+                    o.payment_method,
+                    o.order_status as status,
+                    o.total_amount,
+                    o.order_date as created_at,
+                    COUNT(oi.order_item_id) as total_items,
+                    MAX(p.payment_status) as payment_status
+                FROM orders o
+                LEFT JOIN order_items oi ON o.order_id = oi.order_id
+                LEFT JOIN payments p ON o.order_id = p.order_id
+                GROUP BY o.order_id, o.order_code, o.customer_name, o.customer_email, 
+                         o.customer_phone, o.shipping_address, o.payment_method, 
+                         o.order_status, o.total_amount, o.order_date
+                ORDER BY o.order_date DESC
+            `);
+            
+            return {
+                success: true,
+                orders: orders
+            };
+        } catch (error) {
+            console.error('Get all orders error:', error);
+            return {
+                success: false,
+                message: error.message
+            };
+        }
+    }
     
     // =============================================
     // Lấy chi tiết đơn hàng
