@@ -519,7 +519,10 @@ function openAddProductModal() {
     document.getElementById('submitBtnText').textContent = 'Thêm Sản Phẩm';
     document.getElementById('productForm').reset();
     document.getElementById('productId').value = '';
-    document.getElementById('productModal').classList.add('show');
+    
+    const modal = document.getElementById('productModal');
+    modal.style.display = 'flex';
+    modal.classList.add('show');
 }
 
 function editProduct(productId) {
@@ -544,7 +547,9 @@ function editProduct(productId) {
                 document.getElementById('productDescription').value = product.description || '';
                 
                 // Show modal
-                document.getElementById('productModal').classList.add('show');
+                const modal = document.getElementById('productModal');
+                modal.style.display = 'flex';
+                modal.classList.add('show');
             } else {
                 alert('Không thể tải thông tin sản phẩm');
             }
@@ -556,7 +561,9 @@ function editProduct(productId) {
 }
 
 function closeProductModal() {
-    document.getElementById('productModal').classList.remove('show');
+    const modal = document.getElementById('productModal');
+    modal.style.display = 'none';
+    modal.classList.remove('show');
     document.getElementById('productForm').reset();
 }
 
@@ -647,11 +654,16 @@ function viewOrder(orderId) {
 function openOrderStatusModal(orderId, orderCode) {
     document.getElementById('orderIdToUpdate').value = orderId;
     document.getElementById('orderCodeDisplay').textContent = orderCode;
-    document.getElementById('orderStatusModal').classList.add('show');
+    
+    const modal = document.getElementById('orderStatusModal');
+    modal.style.display = 'flex';
+    modal.classList.add('show');
 }
 
 function closeOrderStatusModal() {
-    document.getElementById('orderStatusModal').classList.remove('show');
+    const modal = document.getElementById('orderStatusModal');
+    modal.style.display = 'none';
+    modal.classList.remove('show');
     document.getElementById('orderStatusForm').reset();
 }
 
