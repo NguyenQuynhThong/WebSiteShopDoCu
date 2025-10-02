@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Navigation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .test-link {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .test-link:hover {
+            background: #0056b3;
+        }
+        h2 {
+            color: #333;
+        }
+        .status {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Test Navigation Links</h1>
+    
+    <div class="test-section">
+        <h2>Test Direct Links</h2>
+        <p>Các link trực tiếp đến các trang:</p>
+        <a href="index.html" class="test-link">Trang chủ</a>
+        <a href="products.html" class="test-link">Sản phẩm</a>
+        <a href="login.html" class="test-link">Đăng nhập</a>
+        <a href="register.html" class="test-link">Đăng ký</a>
+        <a href="cart.html" class="test-link">Giỏ hàng</a>
+        <a href="contact.html" class="test-link">Liên hệ</a>
+    </div>
+
+    <div class="test-section">
+        <h2>Test With ./ Prefix</h2>
+        <p>Các link với ./ prefix:</p>
+        <a href="./index.html" class="test-link">Trang chủ</a>
+        <a href="./products.html" class="test-link">Sản phẩm</a>
+        <a href="./login.html" class="test-link">Đăng nhập</a>
+        <a href="./register.html" class="test-link">Đăng ký</a>
+        <a href="./cart.html" class="test-link">Giỏ hàng</a>
+        <a href="./contact.html" class="test-link">Liên hệ</a>
+    </div>
+
+    <div class="test-section">
+        <h2>Component Test</h2>
+        <p>Test header component được load:</p>
+        <div id="header-placeholder"></div>
+        <div id="nav-placeholder"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Server Status</h2>
+        <p id="server-status">Đang kiểm tra server...</p>
+    </div>
+
+    <script>
+        // Test server connection
+        fetch('http://localhost:3000/api/products')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('server-status').innerHTML = 
+                    '<span class="status">✅ Backend server đang chạy</span><br>' +
+                    `Tìm thấy ${data.data?.length || 0} sản phẩm`;
+            })
+            .catch(error => {
+                document.getElementById('server-status').innerHTML = 
+                    '<span style="color: red;">❌ Backend server không chạy</span><br>' +
+                    'Vui lòng khởi động: <code>cd backend && node server.js</code>';
+            });
+
+        // Load components for testing
+        async function loadComponent(elementId, componentPath) {
+            try {
+                const response = await fetch(componentPath);
+                const html = await response.text();
+                document.getElementById(elementId).innerHTML = html;
+                console.log(`✅ Loaded ${componentPath}`);
+            } catch (error) {
+                console.error(`❌ Failed to load ${componentPath}:`, error);
+            }
+        }
+
+        // Load header and nav
+        loadComponent('header-placeholder', 'components/header.html');
+        loadComponent('nav-placeholder', 'components/navigation.html');
+
+        // Log all link clicks
+        document.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A') {
+                console.log('Link clicked:', e.target.href);
+            }
+        });
+    </script>
+</body>
+</html>

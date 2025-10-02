@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng - SecondShop</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header Component -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Navigation Component -->
+    <div id="nav-placeholder"></div>
+
+    <!-- Cart Content -->
+    <section class="cart-section">
+        <div class="container">
+            <h2 class="page-title">Giỏ Hàng Của Bạn</h2>
+
+            <div class="cart-layout">
+                <div class="cart-items">
+                    <div class="cart-item">
+                        <div class="item-image">
+                            <img src="https://images.pexels.com/photos/1126993/pexels-photo-1126993.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Áo thun">
+                        </div>
+                        <div class="item-details">
+                            <h3>Áo Thun Nam Basic</h3>
+                            <p class="item-desc">Size: M | Tình trạng: 90%</p>
+                            <p class="item-price">150,000₫</p>
+                        </div>
+                        <div class="item-quantity">
+                            <button class="qty-btn">-</button>
+                            <input type="number" value="1" min="1">
+                            <button class="qty-btn">+</button>
+                        </div>
+                        <div class="item-total">
+                            <p class="total-price">150,000₫</p>
+                            <button class="btn-remove">Xóa</button>
+                        </div>
+                    </div>
+
+                    <div class="cart-item">
+                        <div class="item-image">
+                            <img src="https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=200" alt="Laptop">
+                        </div>
+                        <div class="item-details">
+                            <h3>Macbook Pro 2019</h3>
+                            <p class="item-desc">i5, 8GB RAM, 256GB SSD</p>
+                            <p class="item-price">15,000,000₫</p>
+                        </div>
+                        <div class="item-quantity">
+                            <button class="qty-btn">-</button>
+                            <input type="number" value="1" min="1">
+                            <button class="qty-btn">+</button>
+                        </div>
+                        <div class="item-total">
+                            <p class="total-price">15,000,000₫</p>
+                            <button class="btn-remove">Xóa</button>
+                        </div>
+                    </div>
+
+                    <div class="cart-item">
+                        <div class="item-image">
+                            <img src="https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?auto=compress&cs=tinysrgb&w=200" alt="iPhone">
+                        </div>
+                        <div class="item-details">
+                            <h3>iPhone 11 Pro</h3>
+                            <p class="item-desc">64GB, Xanh, 90%</p>
+                            <p class="item-price">8,500,000₫</p>
+                        </div>
+                        <div class="item-quantity">
+                            <button class="qty-btn">-</button>
+                            <input type="number" value="1" min="1">
+                            <button class="qty-btn">+</button>
+                        </div>
+                        <div class="item-total">
+                            <p class="total-price">8,500,000₫</p>
+                            <button class="btn-remove">Xóa</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cart-summary">
+                    <h3>Tóm Tắt Đơn Hàng</h3>
+
+                    <div class="summary-row">
+                        <span>Tạm tính:</span>
+                        <span>23,650,000₫</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Phí vận chuyển:</span>
+                        <span>50,000₫</span>
+                    </div>
+
+                    <div class="summary-row discount">
+                        <span>Giảm giá:</span>
+                        <span>-100,000₫</span>
+                    </div>
+
+                    <div class="summary-divider"></div>
+
+                    <div class="summary-row total">
+                        <span>Tổng cộng:</span>
+                        <span>23,600,000₫</span>
+                    </div>
+
+                    <div class="coupon-section">
+                        <input type="text" placeholder="Nhập mã giảm giá">
+                        <button class="btn-apply">Áp dụng</button>
+                    </div>
+
+                    <button class="btn-checkout" onclick="checkout()">Thanh toán</button>
+                    <a href="index.html" class="btn-continue">Tiếp tục mua sắm</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Load Components -->
+    <script src="components/loader.js"></script>
+    <script src="cart.js"></script>
+</body>
+</html>

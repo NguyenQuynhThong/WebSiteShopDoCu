@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sản Phẩm - SecondShop</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header Component -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Navigation Component -->
+    <div id="nav-placeholder"></div>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Tất Cả Sản Phẩm</h1>
+            <p>Khám phá bộ sưu tập quần áo cũ và công nghệ của chúng tôi</p>
+        </div>
+    </section>
+
+    <!-- Search & Filter Section -->
+    <section class="filter-section">
+        <div class="container">
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." class="search-input">
+                <button id="searchBtn" class="btn-search">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    Tìm kiếm
+                </button>
+            </div>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <label>Danh mục:</label>
+                    <select id="categoryFilter" class="filter-select">
+                        <option value="all">Tất cả</option>
+                        <option value="clothing">Quần áo</option>
+                        <option value="tech">Công nghệ</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Sắp xếp:</label>
+                    <select id="sortFilter" class="filter-select">
+                        <option value="newest">Mới nhất</option>
+                        <option value="price-asc">Giá thấp đến cao</option>
+                        <option value="price-desc">Giá cao đến thấp</option>
+                        <option value="popular">Phổ biến</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Giá:</label>
+                    <select id="priceFilter" class="filter-select">
+                        <option value="all">Tất cả</option>
+                        <option value="0-500k">Dưới 500k</option>
+                        <option value="500k-2m">500k - 2 triệu</option>
+                        <option value="2m-5m">2 - 5 triệu</option>
+                        <option value="5m+">Trên 5 triệu</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Search Results Info -->
+            <div id="searchResultsInfo" class="search-results-info" style="display: none;">
+                <p>Tìm thấy <strong id="resultsCount">0</strong> sản phẩm cho "<strong id="searchKeyword"></strong>"</p>
+                <button id="clearSearchBtn" class="btn-clear-search">Xóa tìm kiếm</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- All Products Section -->
+    <section class="products">
+        <div class="container">
+            <!-- Loading Indicator -->
+            <div id="loadingIndicator" class="loading-indicator" style="display: none;">
+                <div class="spinner"></div>
+                <p>Đang tải sản phẩm...</p>
+            </div>
+
+            <!-- Products Grid -->
+            <div id="productsGrid" class="product-grid">
+                <!-- Products will be loaded here dynamically -->
+            </div>
+
+            <!-- No Results Message -->
+            <div id="noResultsMessage" class="no-results" style="display: none;">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                    <line x1="11" y1="8" x2="11" y2="14"></line>
+                    <line x1="11" y1="16" x2="11.01" y2="16"></line>
+                </svg>
+                <h3>Không tìm thấy sản phẩm</h3>
+                <p>Vui lòng thử tìm kiếm với từ khóa khác hoặc điều chỉnh bộ lọc</p>
+            </div>
+        </div>
+    </section>
+               
+
+    <!-- Tech Products Section -->
+    <section class="products">
+        <div class="container">
+            <h2 class="section-title">Sản Phẩm Công Nghệ</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=400" alt="Laptop">
+                        <span class="badge">-20%</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Macbook Pro 2019</h3>
+                        <p class="product-desc">i5, 8GB RAM, 256GB SSD</p>
+                        <div class="product-price">
+                            <span class="price-current">15,000,000₫</span>
+                            <span class="price-old">18,000,000₫</span>
+                        </div>
+                        <button class="btn-add-cart">Thêm vào giỏ</button>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.pexels.com/photos/788946/pexels-photo-788946.jpeg?auto=compress&cs=tinysrgb&w=400" alt="iPhone">
+                        <span class="badge">Hot</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>iPhone 11 Pro</h3>
+                        <p class="product-desc">64GB, Xanh, 90%</p>
+                        <div class="product-price">
+                            <span class="price-current">8,500,000₫</span>
+                        </div>
+                        <button class="btn-add-cart">Thêm vào giỏ</button>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.pexels.com/photos/1334597/pexels-photo-1334597.jpeg?auto=compress&cs=tinysrgb&w=400" alt="iPad">
+                    </div>
+                    <div class="product-info">
+                        <h3>iPad Air 2020</h3>
+                        <p class="product-desc">64GB, WiFi, Xám</p>
+                        <div class="product-price">
+                            <span class="price-current">12,000,000₫</span>
+                        </div>
+                        <button class="btn-add-cart">Thêm vào giỏ</button>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?auto=compress&cs=tinysrgb&w=400" alt="AirPods">
+                    </div>
+                    <div class="product-info">
+                        <h3>AirPods Pro</h3>
+                        <p class="product-desc">Fullbox, 95%</p>
+                        <div class="product-price">
+                            <span class="price-current">3,500,000₫</span>
+                        </div>
+                        <button class="btn-add-cart">Thêm vào giỏ</button>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.pexels.com/photos/812264/pexels-photo-812264.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Dell Laptop">
+                        <span class="badge">New</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Dell XPS 13</h3>
+                        <p class="product-desc">i7, 16GB RAM, 512GB SSD</p>
+                        <div class="product-price">
+                            <span class="price-current">18,500,000₫</span>
+                        </div>
+                        <button class="btn-add-cart">Thêm vào giỏ</button>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.pexels.com/photos/404280/pexels-photo-404280.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Samsung Phone">
+                    </div>
+                    <div class="product-info">
+                        <h3>Samsung S21 Ultra</h3>
+                        <p class="product-desc">128GB, Đen, 88%</p>
+                        <div class="product-price">
+                            <span class="price-current">11,000,000₫</span>
+                        </div>
+                        <button class="btn-add-cart">Thêm vào giỏ</button>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.pexels.com/photos/356056/pexels-photo-356056.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Apple Watch">
+                        <span class="badge">-15%</span>
+                    </div>
+                    <div class="product-info">
+                        <h3>Apple Watch Series 6</h3>
+                        <p class="product-desc">44mm, GPS, Đỏ</p>
+                        <div class="product-price">
+                            <span class="price-current">6,800,000₫</span>
+                            <span class="price-old">8,000,000₫</span>
+                        </div>
+                        <button class="btn-add-cart">Thêm vào giỏ</button>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://images.pexels.com/photos/1649771/pexels-photo-1649771.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Tai nghe">
+                    </div>
+                    <div class="product-info">
+                        <h3>Sony WH-1000XM4</h3>
+                        <p class="product-desc">Fullbox, 92%</p>
+                        <div class="product-price">
+                            <span class="price-current">4,200,000₫</span>
+                        </div>
+                        <button class="btn-add-cart">Thêm vào giỏ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pagination -->
+    <section class="pagination">
+        <div class="container">
+            <div id="paginationWrapper" class="pagination-wrapper">
+                <!-- Pagination will be generated dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Component -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Chatbot Widget Component -->
+    <div id="chatbot-placeholder"></div>
+
+    <!-- Load Components -->
+    <script src="components/loader.js"></script>
+    <script src="products.js"></script>
+</body>
+</html>

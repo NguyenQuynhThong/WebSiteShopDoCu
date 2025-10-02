@@ -1,0 +1,49 @@
+// ============================================
+// API TEST EXAMPLES
+// Mở file này trong VS Code và test API
+// ============================================
+
+// Cài đặt REST Client extension trong VS Code để test
+// hoặc copy các URL vào browser/Postman
+
+### 1. Kiểm tra server đang chạy
+GET http://localhost:3000
+
+### 2. Lấy tất cả sản phẩm (page 1)
+GET http://localhost:3000/api/products?page=1&limit=20
+
+### 3. Lấy sản phẩm category quần áo
+GET http://localhost:3000/api/products?category=clothing
+
+### 4. Lấy sản phẩm category công nghệ
+GET http://localhost:3000/api/products?category=tech
+
+### 5. Tìm kiếm "jean"
+GET http://localhost:3000/api/products/search?q=jean
+
+### 6. Tìm kiếm "áo"
+GET http://localhost:3000/api/products/search?q=áo
+
+### 7. Tìm kiếm "iphone"
+GET http://localhost:3000/api/products/search?q=iphone
+
+### 8. Tìm kiếm với filter category
+GET http://localhost:3000/api/products/search?q=áo&category=clothing
+
+### 9. Tìm kiếm với filter giá dưới 500k
+GET http://localhost:3000/api/products/search?q=áo&priceRange=0-500k
+
+### 10. Tìm kiếm với nhiều filters
+GET http://localhost:3000/api/products/search?q=áo&category=clothing&priceRange=0-500k&page=1
+
+### 11. Tìm kiếm sản phẩm công nghệ giá 2-5 triệu
+GET http://localhost:3000/api/products/search?q=&category=tech&priceRange=2m-5m
+
+### 12. Lấy chi tiết sản phẩm ID = 1
+GET http://localhost:3000/api/products/1
+
+### 13. Lấy chi tiết sản phẩm ID = 13 (iPhone)
+GET http://localhost:3000/api/products/13
+
+### 14. Test pagination - page 2
+GET http://localhost:3000/api/products?page=2&limit=10

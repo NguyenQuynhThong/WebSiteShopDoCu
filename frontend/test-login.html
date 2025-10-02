@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        h1 { color: #333; }
+        .status { 
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .info { background-color: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Test Login Page</h1>
+    <div id="status"></div>
+    
+    <h3>Kiểm tra:</h3>
+    <ul id="checks"></ul>
+    
+    <button onclick="window.location.href='login.html'" style="padding: 10px 20px; margin-top: 20px;">
+        Mở Trang Login
+    </button>
+
+    <script>
+        const statusDiv = document.getElementById('status');
+        const checksList = document.getElementById('checks');
+        
+        function addCheck(message, isSuccess) {
+            const li = document.createElement('li');
+            li.textContent = message;
+            li.style.color = isSuccess ? 'green' : 'red';
+            checksList.appendChild(li);
+        }
+        
+        // Check 1: CSS file exists
+        fetch('style.css')
+            .then(response => {
+                if (response.ok) {
+                    addCheck('✓ File style.css tồn tại', true);
+                } else {
+                    addCheck('✗ File style.css không tìm thấy', false);
+                }
+            })
+            .catch(err => addCheck('✗ Lỗi khi tải style.css: ' + err.message, false));
+        
+        // Check 2: JS file exists
+        fetch('login.js')
+            .then(response => {
+                if (response.ok) {
+                    addCheck('✓ File login.js tồn tại', true);
+                } else {
+                    addCheck('✗ File login.js không tìm thấy', false);
+                }
+            })
+            .catch(err => addCheck('✗ Lỗi khi tải login.js: ' + err.message, false));
+        
+        // Check 3: Backend API
+        fetch('http://localhost:3000/api/products')
+            .then(response => {
+                if (response.ok) {
+                    addCheck('✓ Backend server đang chạy (port 3000)', true);
+                    statusDiv.innerHTML = '<div class="status success">✓ Tất cả đều OK! Backend đang chạy.</div>';
+                } else {
+                    addCheck('⚠ Backend server có vấn đề', false);
+                    statusDiv.innerHTML = '<div class="status error">Backend server có vấn đề</div>';
+                }
+            })
+            .catch(err => {
+                addCheck('✗ Backend server không chạy hoặc không kết nối được', false);
+                statusDiv.innerHTML = '<div class="status error">⚠ Backend server chưa chạy!<br>Hãy chạy: cd backend && node server.js</div>';
+            });
+        
+        // Check 4: Login page exists
+        fetch('login.html')
+            .then(response => {
+                if (response.ok) {
+                    addCheck('✓ File login.html tồn tại', true);
+                } else {
+                    addCheck('✗ File login.html không tìm thấy', false);
+                }
+            })
+            .catch(err => addCheck('✗ Lỗi khi kiểm tra login.html: ' + err.message, false));
+    </script>
+</body>
+</html>
