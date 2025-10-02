@@ -327,6 +327,135 @@
                 </div>
             </div>
         </section>
+
+        <!-- Settings Section -->
+        <section class="admin-section" id="settings" style="display: none;">
+            <h2>⚙️ Cài Đặt Hệ Thống</h2>
+
+            <!-- Admin Profile Settings -->
+            <div class="settings-card">
+                <h3>👤 Thông Tin Admin</h3>
+                <form id="adminProfileForm" class="settings-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="adminFullName">Họ và tên</label>
+                            <input type="text" id="adminFullName" placeholder="Nguyễn Văn A">
+                        </div>
+                        <div class="form-group">
+                            <label for="adminEmail">Email</label>
+                            <input type="email" id="adminEmail" placeholder="admin@example.com" readonly>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="adminPhone">Số điện thoại</label>
+                            <input type="tel" id="adminPhone" placeholder="0123456789">
+                        </div>
+                        <div class="form-group">
+                            <label for="adminRole">Vai trò</label>
+                            <input type="text" id="adminRole" value="Administrator" readonly>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">💾 Lưu thông tin</button>
+                </form>
+            </div>
+
+            <!-- Change Password -->
+            <div class="settings-card">
+                <h3>🔒 Đổi Mật Khẩu</h3>
+                <form id="changePasswordForm" class="settings-form">
+                    <div class="form-group">
+                        <label for="currentPassword">Mật khẩu hiện tại</label>
+                        <input type="password" id="currentPassword" placeholder="Nhập mật khẩu hiện tại" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newPassword">Mật khẩu mới</label>
+                            <input type="password" id="newPassword" placeholder="Nhập mật khẩu mới" required minlength="6">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Xác nhận mật khẩu</label>
+                            <input type="password" id="confirmPassword" placeholder="Nhập lại mật khẩu mới" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">🔑 Đổi mật khẩu</button>
+                </form>
+            </div>
+
+            <!-- System Settings -->
+            <div class="settings-card">
+                <h3>🏪 Thông Tin Cửa Hàng</h3>
+                <form id="shopInfoForm" class="settings-form">
+                    <div class="form-group">
+                        <label for="shopName">Tên cửa hàng</label>
+                        <input type="text" id="shopName" placeholder="LAG Vintage Shop">
+                    </div>
+                    <div class="form-group">
+                        <label for="shopAddress">Địa chỉ</label>
+                        <input type="text" id="shopAddress" placeholder="123 Đường ABC, Quận XYZ, TP.HCM">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="shopPhone">Số điện thoại</label>
+                            <input type="tel" id="shopPhone" placeholder="0123456789">
+                        </div>
+                        <div class="form-group">
+                            <label for="shopEmail">Email</label>
+                            <input type="email" id="shopEmail" placeholder="contact@lagvintage.com">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="shopDescription">Mô tả cửa hàng</label>
+                        <textarea id="shopDescription" rows="4" placeholder="Mô tả ngắn về cửa hàng..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary">💾 Lưu thông tin</button>
+                </form>
+            </div>
+
+            <!-- Database Actions -->
+            <div class="settings-card">
+                <h3>💾 Quản Lý Dữ Liệu</h3>
+                <div class="action-buttons">
+                    <button class="btn-action backup" onclick="backupDatabase()">
+                        📦 Sao lưu dữ liệu
+                    </button>
+                    <button class="btn-action restore" onclick="restoreDatabase()">
+                        ♻️ Khôi phục dữ liệu
+                    </button>
+                    <button class="btn-action danger" onclick="clearCache()">
+                        🗑️ Xóa cache
+                    </button>
+                </div>
+                <p class="help-text">⚠️ Lưu ý: Sao lưu dữ liệu định kỳ để tránh mất mát thông tin</p>
+            </div>
+
+            <!-- System Info -->
+            <div class="settings-card">
+                <h3>📊 Thông Tin Hệ Thống</h3>
+                <table class="info-table">
+                    <tr>
+                        <td><strong>Phiên bản:</strong></td>
+                        <td>v1.0.0</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Database:</strong></td>
+                        <td>MySQL - lag_vintage_shop</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Server:</strong></td>
+                        <td>Node.js Express</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Kết nối:</strong></td>
+                        <td><span class="status-badge active">🟢 Hoạt động</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Lần cập nhật cuối:</strong></td>
+                        <td id="lastUpdate">02/10/2025</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
     </main>
 
     <!-- Product Modal (Add/Edit) -->

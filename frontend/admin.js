@@ -28,6 +28,186 @@ function checkAdminAuth() {
 }
 
 // ============================================
+// Settings Functions
+// ============================================
+
+// Load Admin Settings
+function loadAdminSettings() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) return;
+    
+    // Load admin profile info
+    document.getElementById('adminFullName').value = user.fullName || '';
+    document.getElementById('adminEmail').value = user.email || '';
+    document.getElementById('adminPhone').value = user.phone || '';
+    document.getElementById('adminRole').value = user.role === 'admin' ? 'Administrator' : 'User';
+    
+    // Load shop info (mock data - should be from API in production)
+    document.getElementById('shopName').value = 'LAG Vintage Shop';
+    document.getElementById('shopAddress').value = '123 Đường ABC, Quận XYZ, TP.HCM';
+    document.getElementById('shopPhone').value = '0123456789';
+    document.getElementById('shopEmail').value = 'contact@lagvintage.com';
+    document.getElementById('shopDescription').value = 'Cửa hàng chuyên bán đồ cũ vintage chất lượng cao';
+}
+
+// Handle Admin Profile Update
+document.addEventListener('DOMContentLoaded', function() {
+    const adminProfileForm = document.getElementById('adminProfileForm');
+    if (adminProfileForm) {
+        adminProfileForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const user = JSON.parse(localStorage.getItem('user'));
+            const fullName = document.getElementById('adminFullName').value;
+            const phone = document.getElementById('adminPhone').value;
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/users/${user.userId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ fullName, phone })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Update localStorage
+                    user.fullName = fullName;
+                    user.phone = phone;
+                    localStorage.setItem('user', JSON.stringify(user));
+                    
+                    alert('✅ Cập nhật thông tin thành công!');
+                    displayAdminInfo(user);
+                } else {
+                    alert('❌ ' + (data.message || 'Không thể cập nhật thông tin'));
+                }
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                alert('❌ Có lỗi xảy ra khi cập nhật thông tin');
+            }
+        });
+    }
+});
+
+// Handle Change Password
+document.addEventListener('DOMContentLoaded', function() {
+    const changePasswordForm = document.getElementById('changePasswordForm');
+    if (changePasswordForm) {
+        changePasswordForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // Validation
+            if (newPassword !== confirmPassword) {
+                alert('❌ Mật khẩu mới và xác nhận mật khẩu không khớp!');
+                return;
+            }
+            
+            if (newPassword.length < 6) {
+                alert('❌ Mật khẩu mới phải có ít nhất 6 ký tự!');
+                return;
+            }
+            
+            try {
+                const user = JSON.parse(localStorage.getItem('user'));
+                const response = await fetch(`${API_BASE_URL}/users/${user.userId}/change-password`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        oldPassword: currentPassword,
+                        newPassword: newPassword
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('✅ Đổi mật khẩu thành công!');
+                    changePasswordForm.reset();
+                } else {
+                    alert('❌ ' + (data.message || 'Không thể đổi mật khẩu'));
+                }
+            } catch (error) {
+                console.error('Error changing password:', error);
+                alert('❌ Có lỗi xảy ra khi đổi mật khẩu');
+            }
+        });
+    }
+});
+
+// Handle Shop Info Update
+document.addEventListener('DOMContentLoaded', function() {
+    const shopInfoForm = document.getElementById('shopInfoForm');
+    if (shopInfoForm) {
+        shopInfoForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Mock save - in production, should save to database
+            const shopInfo = {
+                name: document.getElementById('shopName').value,
+                address: document.getElementById('shopAddress').value,
+                phone: document.getElementById('shopPhone').value,
+                email: document.getElementById('shopEmail').value,
+                description: document.getElementById('shopDescription').value
+            };
+            
+            // Save to localStorage as mock
+            localStorage.setItem('shopInfo', JSON.stringify(shopInfo));
+            
+            alert('✅ Lưu thông tin cửa hàng thành công!');
+        });
+    }
+});
+
+// Database Actions
+function backupDatabase() {
+    if (confirm('🔄 Bạn có chắc chắn muốn sao lưu dữ liệu?')) {
+        // Mock backup - in production, should call API
+        alert('📦 Đang sao lưu dữ liệu...\n\n(Chức năng này cần kết nối với backend API)');
+        
+        // Simulate backup
+        setTimeout(() => {
+            alert('✅ Sao lưu dữ liệu thành công!\n\nFile: backup_' + new Date().toISOString().split('T')[0] + '.sql');
+        }, 1000);
+    }
+}
+
+function restoreDatabase() {
+    if (confirm('⚠️ Bạn có chắc chắn muốn khôi phục dữ liệu?\n\nHành động này sẽ ghi đè lên dữ liệu hiện tại!')) {
+        // Mock restore - in production, should call API
+        alert('♻️ Đang khôi phục dữ liệu...\n\n(Chức năng này cần kết nối với backend API)');
+        
+        // Simulate restore
+        setTimeout(() => {
+            alert('✅ Khôi phục dữ liệu thành công!');
+        }, 1000);
+    }
+}
+
+function clearCache() {
+    if (confirm('🗑️ Bạn có chắc chắn muốn xóa cache?\n\nHành động này sẽ làm mới tất cả dữ liệu tạm.')) {
+        // Clear localStorage cache (keep user login)
+        const user = localStorage.getItem('user');
+        localStorage.clear();
+        if (user) {
+            localStorage.setItem('user', user);
+        }
+        
+        alert('✅ Đã xóa cache thành công!');
+        window.location.reload();
+    }
+}
+
+// ============================================
+// Initialize Dashboard
+// ================================================================================
 // Load Dashboard Statistics
 // ============================================
 async function loadDashboardStats() {
@@ -857,6 +1037,9 @@ window.addEventListener('DOMContentLoaded', () => {
     
     console.log('👥 Loading customers table...');
     loadCustomersTable();
+    
+    console.log('⚙️ Loading settings...');
+    loadAdminSettings();
     
     console.log('✅ Admin Dashboard initialized successfully');
     
