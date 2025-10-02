@@ -291,5 +291,54 @@
             </div>
         </section>
     </main>
+
+    <script>
+        // ============================================
+        // Admin Authentication Check
+        // ============================================
+        window.addEventListener('DOMContentLoaded', () => {
+            const userStr = localStorage.getItem('user');
+            
+            // Check if user is logged in
+            if (!userStr) {
+                alert('Vui lòng đăng nhập để truy cập trang admin');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            const user = JSON.parse(userStr);
+            
+            // Check if user is admin
+            if (user.role !== 'admin') {
+                alert('Bạn không có quyền truy cập trang này');
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Display admin info
+            const adminUserSpan = document.querySelector('.admin-user span');
+            if (adminUserSpan) {
+                adminUserSpan.textContent = user.fullName || user.email;
+            }
+            
+            const userAvatar = document.querySelector('.user-avatar');
+            if (userAvatar && user.fullName) {
+                userAvatar.textContent = user.fullName.charAt(0).toUpperCase();
+            }
+        });
+        
+        // ============================================
+        // Logout functionality
+        // ============================================
+        const logoutBtn = document.querySelector('.btn-logout');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                localStorage.removeItem('user');
+                localStorage.removeItem('userId');
+                window.location.href = 'login.html';
+            });
+        }
+    </script>
 </body>
 </html>

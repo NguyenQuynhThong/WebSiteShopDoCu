@@ -40,18 +40,24 @@ loginForm.addEventListener('submit', async (e) => {
             localStorage.setItem('user', JSON.stringify(data.user));
             localStorage.setItem('userId', data.user.userId);
             
-            // Merge cart if there's a session cart
-            const sessionId = localStorage.getItem('sessionId');
-            if (sessionId) {
-                await mergeCart(sessionId, data.user.userId);
-                localStorage.removeItem('sessionId');
+            // Merge cart if there's a session cart (only for customers)
+            if (data.user.role !== 'admin') {
+                const sessionId = localStorage.getItem('sessionId');
+                if (sessionId) {
+                    await mergeCart(sessionId, data.user.userId);
+                    localStorage.removeItem('sessionId');
+                }
             }
             
             showMessage('Đăng nhập thành công!', 'success');
             
-            // Redirect to home page after 1 second
+            // Redirect based on user role
             setTimeout(() => {
-                window.location.href = 'index.html';
+                if (data.user.role === 'admin') {
+                    window.location.href = 'admin.html';
+                } else {
+                    window.location.href = 'index.html';
+                }
             }, 1000);
         } else {
             showMessage(data.message || 'Đăng nhập thất bại', 'error');
