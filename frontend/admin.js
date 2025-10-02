@@ -423,7 +423,6 @@ async function viewCustomerDetail(customerId) {
         document.getElementById('detailCustomerName').textContent = customer.full_name || 'N/A';
         document.getElementById('detailCustomerEmail').textContent = customer.email || 'N/A';
         document.getElementById('detailCustomerPhone').textContent = customer.phone || 'N/A';
-        document.getElementById('detailCustomerAddress').textContent = customer.address || 'Chưa cập nhật';
         document.getElementById('detailCustomerJoined').textContent = formatDate(customer.created_at);
         
         // Calculate statistics from orders

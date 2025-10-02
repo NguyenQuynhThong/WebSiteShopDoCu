@@ -86,7 +86,6 @@ class User {
                     u.email,
                     u.full_name,
                     u.phone,
-                    u.address,
                     u.role,
                     u.status,
                     u.created_at,

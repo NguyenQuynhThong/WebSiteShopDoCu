@@ -450,8 +450,46 @@
                 <h3>Thông Tin Chi Tiết Khách Hàng</h3>
                 <span class="close-modal" onclick="closeCustomerModal()">&times;</span>
             </div>
-            <div class="modal-body" id="customerDetailContent">
-                <div class="loading">Đang tải...</div>
+            <div class="modal-body">
+                <div class="customer-detail-grid">
+                    <div class="detail-section">
+                        <h4>Thông tin cá nhân</h4>
+                        <div class="detail-row">
+                            <label>Mã khách hàng:</label>
+                            <span id="detailCustomerId" class="detail-value"></span>
+                        </div>
+                        <div class="detail-row">
+                            <label>Họ tên:</label>
+                            <span id="detailCustomerName" class="detail-value"></span>
+                        </div>
+                        <div class="detail-row">
+                            <label>Email:</label>
+                            <span id="detailCustomerEmail" class="detail-value"></span>
+                        </div>
+                        <div class="detail-row">
+                            <label>Số điện thoại:</label>
+                            <span id="detailCustomerPhone" class="detail-value"></span>
+                        </div>
+                        <div class="detail-row">
+                            <label>Ngày tham gia:</label>
+                            <span id="detailCustomerJoined" class="detail-value"></span>
+                        </div>
+                    </div>
+                    <div class="detail-section">
+                        <h4>Thống kê</h4>
+                        <div class="detail-row">
+                            <label>Tổng đơn hàng:</label>
+                            <span id="detailCustomerOrders" class="detail-value"></span>
+                        </div>
+                        <div class="detail-row">
+                            <label>Tổng chi tiêu:</label>
+                            <span id="detailCustomerSpent" class="detail-value"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeCustomerModal()">Đóng</button>
             </div>
         </div>
     </div>
