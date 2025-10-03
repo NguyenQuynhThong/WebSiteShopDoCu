@@ -36,9 +36,10 @@ loginForm.addEventListener('submit', async (e) => {
         const data = await response.json();
         
         if (data.success) {
-            // Save user data to localStorage
+            // Save user data and token to localStorage
             localStorage.setItem('user', JSON.stringify(data.user));
             localStorage.setItem('userId', data.user.userId);
+            localStorage.setItem('token', data.token); // Save JWT token
             
             // Merge cart if there's a session cart (only for customers)
             if (data.user.role !== 'admin') {

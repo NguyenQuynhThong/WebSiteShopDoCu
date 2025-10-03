@@ -55,13 +55,20 @@
                 <div class="contact-form-wrapper">
                     <h3>Gửi Tin Nhắn</h3>
                     <form class="contact-form">
-                        <div class="form-group">
-                            <label for="name">Họ và tên</label>
-                            <input type="text" id="name" placeholder="Nguyễn Văn A" required>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="first_name">Họ <span class="required">*</span></label>
+                                <input type="text" id="first_name" placeholder="Nguyễn" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="last_name">Tên <span class="required">*</span></label>
+                                <input type="text" id="last_name" placeholder="Văn A" required>
+                            </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="email">Email</label>
+                            <label for="email">Email <span class="required">*</span></label>
                             <input type="email" id="email" placeholder="example@email.com" required>
                         </div>
 
@@ -71,19 +78,29 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="subject">Chủ đề</label>
-                            <select id="subject">
+                            <label for="subject">Chủ đề <span class="required">*</span></label>
+                            <select id="subject" required>
                                 <option value="">Chọn chủ đề</option>
-                                <option value="support">Hỗ trợ khách hàng</option>
+                                <option value="general">Tổng quan</option>
                                 <option value="order">Vấn đề đơn hàng</option>
                                 <option value="product">Thông tin sản phẩm</option>
+                                <option value="shipping">Vận chuyển</option>
+                                <option value="return">Đổi trả hàng</option>
+                                <option value="complaint">Khiếu nại</option>
                                 <option value="other">Khác</option>
                             </select>
                         </div>
 
                         <div class="form-group">
-                            <label for="message">Nội dung</label>
+                            <label for="message">Nội dung <span class="required">*</span></label>
                             <textarea id="message" rows="6" placeholder="Nhập nội dung tin nhắn..." required></textarea>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="subscribe_newsletter">
+                                <span>Đăng ký nhận tin tức và khuyến mãi từ SecondShop</span>
+                            </label>
                         </div>
 
                         <button type="submit" class="btn-submit">Gửi tin nhắn</button>
@@ -129,5 +146,7 @@
 
     <!-- Load Components -->
     <script src="components/loader.js"></script>
+    <!-- Contact Form Script -->
+    <script src="contact.js"></script>
 </body>
 </html>

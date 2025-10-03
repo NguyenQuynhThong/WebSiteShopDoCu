@@ -1035,6 +1035,9 @@ window.addEventListener('DOMContentLoaded', () => {
     console.log('👥 Loading customers table...');
     loadCustomersTable();
     
+    console.log('✉️ Loading contacts table...');
+    loadContactsTable();
+    
     console.log('⚙️ Loading settings...');
     loadAdminSettings();
     
@@ -1046,3 +1049,367 @@ window.addEventListener('DOMContentLoaded', () => {
     // Setup statistics filter buttons
     setupStatisticsFilters();
 });
+
+// ============================================
+// CONTACTS MANAGEMENT FUNCTIONS
+// ============================================
+
+let currentContactsPage = 1;
+let contactsFilters = {};
+
+// Load Contacts Table
+async function loadContactsTable(page = 1) {
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('Vui lòng đăng nhập');
+            window.location.href = 'login.html';
+            return;
+        }
+
+        const params = new URLSearchParams({
+            page: page,
+            limit: 20,
+            ...contactsFilters
+        });
+
+        const response = await fetch(`${API_BASE_URL}/contacts?${params}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            displayContactsTable(data.data);
+            displayContactsPagination(data.pagination);
+            displayContactsStats(data.stats);
+            currentContactsPage = page;
+        } else {
+            console.error('Error loading contacts:', data.message);
+        }
+    } catch (error) {
+        console.error('Error loading contacts:', error);
+    }
+}
+
+// Display Contacts Table
+function displayContactsTable(contacts) {
+    const tbody = document.getElementById('contacts-tbody');
+    
+    if (!contacts || contacts.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="9" style="text-align: center; padding: 2rem;">
+                    Chưa có liên hệ nào
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    tbody.innerHTML = contacts.map(contact => {
+        const fullName = `${contact.first_name} ${contact.last_name}`;
+        const messagePreview = contact.message.length > 50 
+            ? contact.message.substring(0, 50) + '...' 
+            : contact.message;
+        
+        const statusBadges = [];
+        if (!contact.is_read) {
+            statusBadges.push('<span class="badge badge-new">Mới</span>');
+        } else {
+            statusBadges.push('<span class="badge badge-read">Đã đọc</span>');
+        }
+        
+        if (contact.is_replied) {
+            statusBadges.push('<span class="badge badge-replied">Đã trả lời</span>');
+        }
+
+        const subjectLabels = {
+            'general': 'Tổng quan',
+            'order': 'Đơn hàng',
+            'product': 'Sản phẩm',
+            'shipping': 'Vận chuyển',
+            'return': 'Đổi trả',
+            'complaint': 'Khiếu nại',
+            'other': 'Khác'
+        };
+
+        return `
+            <tr data-contact-id="${contact.contact_id}">
+                <td>${contact.contact_id}</td>
+                <td>${fullName}</td>
+                <td>${contact.email}</td>
+                <td>${contact.phone || '-'}</td>
+                <td><span class="badge badge-subject">${subjectLabels[contact.subject] || contact.subject}</span></td>
+                <td class="message-preview">${messagePreview}</td>
+                <td>${statusBadges.join(' ')}</td>
+                <td>${formatDate(contact.created_at)}</td>
+                <td>
+                    <button class="btn-icon btn-view" onclick="viewContactDetail(${contact.contact_id})" title="Xem chi tiết">
+                        👁️
+                    </button>
+                    ${!contact.is_read ? `
+                    <button class="btn-icon btn-mark-read" onclick="markContactAsRead(${contact.contact_id})" title="Đánh dấu đã đọc">
+                        ✓
+                    </button>
+                    ` : ''}
+                    <button class="btn-icon btn-delete" onclick="deleteContact(${contact.contact_id})" title="Xóa">
+                        🗑️
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// Display Contacts Stats
+function displayContactsStats(stats) {
+    if (!stats) return;
+    
+    document.getElementById('total-contacts').textContent = stats.total || 0;
+    document.getElementById('unread-contacts').textContent = stats.unread || 0;
+    document.getElementById('read-contacts').textContent = stats.read || 0;
+    document.getElementById('replied-contacts').textContent = stats.replied || 0;
+}
+
+// Display Contacts Pagination
+function displayContactsPagination(pagination) {
+    const paginationDiv = document.getElementById('contacts-pagination');
+    
+    if (!pagination || pagination.totalPages <= 1) {
+        paginationDiv.innerHTML = '';
+        return;
+    }
+
+    let html = '<div class="pagination-controls">';
+    
+    // Previous button
+    if (pagination.page > 1) {
+        html += `<button class="btn-page" onclick="loadContactsTable(${pagination.page - 1})">← Trước</button>`;
+    }
+    
+    // Page numbers
+    for (let i = 1; i <= pagination.totalPages; i++) {
+        if (i === pagination.page) {
+            html += `<button class="btn-page active">${i}</button>`;
+        } else if (i === 1 || i === pagination.totalPages || Math.abs(i - pagination.page) <= 2) {
+            html += `<button class="btn-page" onclick="loadContactsTable(${i})">${i}</button>`;
+        } else if (i === pagination.page - 3 || i === pagination.page + 3) {
+            html += `<span class="pagination-dots">...</span>`;
+        }
+    }
+    
+    // Next button
+    if (pagination.page < pagination.totalPages) {
+        html += `<button class="btn-page" onclick="loadContactsTable(${pagination.page + 1})">Sau →</button>`;
+    }
+    
+    html += '</div>';
+    paginationDiv.innerHTML = html;
+}
+
+// View Contact Detail
+async function viewContactDetail(contactId) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_BASE_URL}/contacts/${contactId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            const contact = data.data;
+            const fullName = `${contact.first_name} ${contact.last_name}`;
+            
+            const subjectLabels = {
+                'general': 'Tổng quan',
+                'order': 'Đơn hàng',
+                'product': 'Sản phẩm',
+                'shipping': 'Vận chuyển',
+                'return': 'Đổi trả',
+                'complaint': 'Khiếu nại',
+                'other': 'Khác'
+            };
+
+            document.getElementById('detailContactName').textContent = fullName;
+            document.getElementById('detailContactEmail').textContent = contact.email;
+            document.getElementById('detailContactPhone').textContent = contact.phone || 'Không có';
+            document.getElementById('detailContactSubject').textContent = subjectLabels[contact.subject] || contact.subject;
+            document.getElementById('detailContactTime').textContent = formatDateTime(contact.created_at);
+            document.getElementById('detailContactNewsletter').textContent = contact.subscribe_newsletter ? 'Có' : 'Không';
+            document.getElementById('detailContactMessage').textContent = contact.message;
+
+            // Update status badges
+            const readStatus = document.getElementById('readStatusBadge');
+            const replyStatus = document.getElementById('replyStatusBadge');
+            
+            readStatus.className = 'status-badge ' + (contact.is_read ? 'badge-read' : 'badge-unread');
+            readStatus.textContent = contact.is_read ? '✓ Đã đọc' : '✗ Chưa đọc';
+            
+            replyStatus.className = 'status-badge ' + (contact.is_replied ? 'badge-replied' : 'badge-pending');
+            replyStatus.textContent = contact.is_replied ? '✓ Đã trả lời' : '✗ Chưa trả lời';
+
+            // Setup action buttons
+            document.getElementById('markAsReadBtn').onclick = () => markContactAsRead(contactId);
+            document.getElementById('markAsRepliedBtn').onclick = () => markContactAsReplied(contactId);
+            document.getElementById('deleteContactBtn').onclick = () => deleteContact(contactId);
+
+            // Show modal
+            document.getElementById('contactDetailModal').style.display = 'flex';
+
+            // Auto mark as read when viewed
+            if (!contact.is_read) {
+                await markContactAsRead(contactId, false);
+            }
+        }
+    } catch (error) {
+        console.error('Error viewing contact detail:', error);
+        alert('Có lỗi xảy ra khi tải chi tiết liên hệ');
+    }
+}
+
+// Mark Contact as Read
+async function markContactAsRead(contactId, reload = true) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_BASE_URL}/contacts/${contactId}/read`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success && reload) {
+            alert('Đã đánh dấu đã đọc');
+            closeContactModal();
+            loadContactsTable(currentContactsPage);
+        }
+    } catch (error) {
+        console.error('Error marking as read:', error);
+        if (reload) alert('Có lỗi xảy ra');
+    }
+}
+
+// Mark Contact as Replied
+async function markContactAsReplied(contactId) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_BASE_URL}/contacts/${contactId}/replied`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert('Đã đánh dấu đã trả lời');
+            closeContactModal();
+            loadContactsTable(currentContactsPage);
+        }
+    } catch (error) {
+        console.error('Error marking as replied:', error);
+        alert('Có lỗi xảy ra');
+    }
+}
+
+// Delete Contact
+async function deleteContact(contactId) {
+    if (!confirm('Bạn có chắc muốn xóa liên hệ này?')) return;
+
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${API_BASE_URL}/contacts/${contactId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert('Đã xóa liên hệ thành công');
+            closeContactModal();
+            loadContactsTable(currentContactsPage);
+        }
+    } catch (error) {
+        console.error('Error deleting contact:', error);
+        alert('Có lỗi xảy ra');
+    }
+}
+
+// Close Contact Modal
+function closeContactModal() {
+    document.getElementById('contactDetailModal').style.display = 'none';
+}
+
+// Setup Contact Filters
+document.addEventListener('DOMContentLoaded', () => {
+    const statusFilter = document.getElementById('contact-status-filter');
+    const subjectFilter = document.getElementById('contact-subject-filter');
+    const searchInput = document.getElementById('contact-search');
+
+    if (statusFilter) {
+        statusFilter.addEventListener('change', (e) => {
+            if (e.target.value === 'unread') {
+                contactsFilters.is_read = false;
+                delete contactsFilters.is_replied;
+            } else if (e.target.value === 'read') {
+                contactsFilters.is_read = true;
+                delete contactsFilters.is_replied;
+            } else if (e.target.value === 'replied') {
+                contactsFilters.is_replied = true;
+                delete contactsFilters.is_read;
+            } else {
+                delete contactsFilters.is_read;
+                delete contactsFilters.is_replied;
+            }
+            loadContactsTable(1);
+        });
+    }
+
+    if (subjectFilter) {
+        subjectFilter.addEventListener('change', (e) => {
+            if (e.target.value) {
+                contactsFilters.subject = e.target.value;
+            } else {
+                delete contactsFilters.subject;
+            }
+            loadContactsTable(1);
+        });
+    }
+
+    if (searchInput) {
+        let searchTimeout;
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                if (e.target.value) {
+                    contactsFilters.search = e.target.value;
+                } else {
+                    delete contactsFilters.search;
+                }
+                loadContactsTable(1);
+            }, 500);
+        });
+    }
+});
+
+// Helper: Format DateTime
+function formatDateTime(dateString) {
+    if (!dateString) return '-';
+    const date = new Date(dateString);
+    return date.toLocaleString('vi-VN');
+}
+

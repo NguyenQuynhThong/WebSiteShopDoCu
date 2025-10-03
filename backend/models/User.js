@@ -1,5 +1,9 @@
 const { pool: db } = require('../config/database');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-here-change-in-production';
+const JWT_EXPIRES_IN = '7d'; // Token expires in 7 days
 
 class User {
     // Đăng ký user mới
@@ -59,10 +63,22 @@ class User {
             // Update last login
             await db.query('UPDATE users SET last_login = NOW() WHERE user_id = ?', [user.user_id]);
 
-            // Return user data (without password)
+            // Generate JWT token
+            const token = jwt.sign(
+                {
+                    userId: user.user_id,
+                    email: user.email,
+                    role: user.role
+                },
+                JWT_SECRET,
+                { expiresIn: JWT_EXPIRES_IN }
+            );
+
+            // Return user data with token
             return {
                 success: true,
                 message: 'Đăng nhập thành công',
+                token: token,
                 user: {
                     userId: user.user_id,
                     email: user.email,
