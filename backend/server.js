@@ -37,9 +37,6 @@ app.use((req, res, next) => {
 // Static files (images)
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-// Serve frontend files
-app.use(express.static(path.join(__dirname, '../frontend')));
-
 // Logging middleware
 app.use((req, res, next) => {
     console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
@@ -68,7 +65,7 @@ app.get('/', (req, res) => {
 // Test database connection
 app.get('/api/test-db', async (req, res) => {
     try {
-        const [rows] = await pool.promise().query('SELECT 1 + 1 AS result');
+        const [rows] = await pool.query('SELECT 1 + 1 AS result');
         res.json({
             success: true,
             message: 'Database connection successful',
@@ -135,8 +132,9 @@ app.listen(PORT, () => {
     console.log('🚀 LAG VINTAGE SHOP SERVER');
     console.log('========================================');
     console.log(`📡 Server running on: http://localhost:${PORT}`);
-    console.log(`📂 Static files: ${path.join(__dirname, 'images')}`);
+    console.log(`📂 Images directory: ${path.join(__dirname, 'images')}`);
     console.log(`🌐 API Base URL: http://localhost:${PORT}/api`);
+    console.log('📄 Frontend served separately on port 8080');
     console.log('========================================');
     console.log('');
 });

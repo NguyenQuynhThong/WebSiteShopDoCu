@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: lag_vintage_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-TVU@842004}
+      MYSQL_DATABASE: ${DB_NAME:-lag_vintage_shop}
+      MYSQL_USER: ${DB_USER:-lag_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-TVU@842004}
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
+    ports:
+      - "${DB_PORT:-3307}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/config/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - lag_vintage_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # Node.js Backend API
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: lag_vintage_backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DB_HOST: mysql
+      DB_USER: ${DB_USER:-lag_user}
+      DB_PASSWORD: ${DB_PASSWORD:-TVU@842004}
+      DB_NAME: ${DB_NAME:-lag_vintage_shop}
+      DB_PORT: 3306
+    ports:
+      - "${BACKEND_PORT:-3000}:3000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - lag_vintage_network
+    volumes:
+      - ./backend/images:/app/images
+      - ./backend/uploads:/app/uploads
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/test-db"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend Static Files
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: lag_vintage_frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-8080}:80"
+    depends_on:
+      - backend
+    networks:
+      - lag_vintage_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  lag_vintage_network:
+    driver: bridge
