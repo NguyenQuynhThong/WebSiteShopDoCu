@@ -191,6 +191,69 @@ Sau khi triển khai thành công, các API endpoints có sẵn:
 
 **Lưu ý**: Frontend tự động proxy API calls đến backend thông qua nginx.
 
+## API Testing với Postman
+
+Dự án đã có sẵn file Postman collection hoàn chỉnh **v2.0.0**:
+
+### 📁 File: `LAG_Vintage_Shop_Postman_Collection.json`
+
+**Cách import và sử dụng:**
+
+1. **Import Collection:**
+   - Mở Postman
+   - Click "Import" 
+   - Chọn file `LAG_Vintage_Shop_Postman_Collection.json`
+
+2. **Cấu hình Environment:**
+   - Tạo Environment mới trong Postman
+   - Thêm biến: `base_url` = `http://localhost:3000`
+   - Hoặc sử dụng biến mặc định trong collection
+
+3. **Thứ tự test API:**
+   **Bước 1: Authentication**
+   - Chạy "Login User" hoặc "Login Admin" để lấy JWT token
+   - Token sẽ tự động lưu vào biến `{{jwt_token}}`
+   **Bước 2: Test các API khác**
+   - Tất cả request đã có authentication header
+   - Biến `{{user_id}}` sẽ tự động cập nhật sau login
+
+4. **Các folder chính:**
+   - **Authentication**: Đăng ký, đăng nhập
+   - **User Management**: Quản lý tài khoản
+   - **Products**: CRUD sản phẩm
+   - **Shopping Cart**: Giỏ hàng
+   - **Orders**: Đặt hàng, quản lý đơn
+   - **Payments**: Thanh toán, QR code
+   - **Contacts**: Liên hệ khách hàng
+   - **Chatbot**: AI trợ lý
+   - **System**: Test kết nối DB
+
+### 🔐 Authentication System
+
+Dự án sử dụng **2 hệ thống authentication khác nhau**:
+
+1. **userId-based Authentication** (cho hầu hết APIs):
+   - Cart, Orders, Payments, User profile
+   - Gửi `userId` trong body hoặc query parameters
+   - Không cần JWT token
+
+2. **JWT Token Authentication** (chỉ cho Admin APIs):
+   - Contacts admin endpoints
+   - Gửi token trong `Authorization: Bearer {{jwt_token}}` header
+
+### ⚠️ Lưu ý quan trọng (v2.0.0)
+
+- **KHÔNG** set Bearer token authentication globally cho collection
+- Chỉ sử dụng JWT token cho Contacts admin endpoints
+- Các API khác sử dụng `userId` trong request body/query
+- Luôn login trước để có `userId` và `jwt_token`
+
+### 📝 Sample Data
+
+Collection đã có sẵn sample data cho test:
+- User: `user@lagvintage.com` / `password`
+- Admin: `admin@lagvintage.com` / `admin123`
+
 ## Hỗ trợ
 
 Nếu gặp vấn đề, kiểm tra:
