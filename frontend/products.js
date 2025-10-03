@@ -30,10 +30,27 @@ const paginationWrapper = document.getElementById('paginationWrapper');
 // ============================================
 // Initialize Page
 // ============================================
-document.addEventListener('DOMContentLoaded', () => {
-    loadProducts();
-    setupEventListeners();
-});
+// Kiểm tra xem DOM đã ready chưa và components đã load
+function initializeProductsPage() {
+    // Kiểm tra xem tất cả elements cần thiết đã có chưa
+    const requiredElements = [productsGrid, searchInput, searchBtn, categoryFilter];
+    const allElementsReady = requiredElements.every(el => el !== null);
+    
+    if (allElementsReady) {
+        loadProducts();
+        setupEventListeners();
+    } else {
+        // Chờ một chút rồi thử lại
+        setTimeout(initializeProductsPage, 100);
+    }
+}
+
+// Kiểm tra trạng thái DOM
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeProductsPage);
+} else {
+    initializeProductsPage();
+}
 
 // ============================================
 // Event Listeners

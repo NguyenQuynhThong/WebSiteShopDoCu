@@ -3,20 +3,15 @@
 // Tích hợp Google Gemini AI
 // =============================================
 
-// API URL configuration
-const API_BASE_URL = window.location.port === '5500' 
-    ? 'http://localhost:3000/api'  // Live Server
-    : '/api';                        // Production/Normal server
+// API URL configuration - detect if running on localhost
+const CHATBOT_API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3000/api'
+    : '/api';
 
-// Đợi DOM load xong mới khởi tạo chatbot
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initChatbot);
-} else {
-    // DOM đã sẵn sàng, khởi tạo ngay
-    initChatbot();
-}
+console.log('🤖 Chatbot initialized with API:', CHATBOT_API_BASE_URL);
 
-function initChatbot() {
+// Function sẽ được gọi từ loader.js sau khi HTML đã load
+function startChatbot() {
     let sessionId = null;
     let isWaitingResponse = false;
 
@@ -57,7 +52,7 @@ function initChatbot() {
     // Load gợi ý câu hỏi
     async function loadSuggestions() {
         try {
-            const response = await fetch(`${API_BASE_URL}/chatbot/suggestions`);
+            const response = await fetch(`${CHATBOT_API_BASE_URL}/chatbot/suggestions`);
             const result = await response.json();
             
             if (result.success && result.data) {
@@ -117,7 +112,7 @@ function initChatbot() {
         isWaitingResponse = true;
 
         try {
-            const response = await fetch(`${API_BASE_URL}/chatbot/chat`, {
+            const response = await fetch(`${CHATBOT_API_BASE_URL}/chatbot/chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

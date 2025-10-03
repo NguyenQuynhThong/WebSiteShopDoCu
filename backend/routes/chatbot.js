@@ -1,39 +1,160 @@
 const express = require('express');
 const router = express.Router();
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const { PROJECT_KNOWLEDGE } = require('../chatbot-knowledge-base');
 require('dotenv').config();
 
 // Khởi tạo Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// System prompt cho chatbot về shop thời trang vintage
-const SYSTEM_PROMPT = `Bạn là trợ lý ảo thân thiện của LAG Vintage Shop - cửa hàng chuyên bán đồ thời trang vintage và công nghệ cũ chất lượng cao.
+// =============================================
+// TẠO SYSTEM PROMPT TỪ KNOWLEDGE BASE
+// =============================================
+function buildSystemPrompt() {
+    const kb = PROJECT_KNOWLEDGE;
+    
+    return `Bạn là ${kb.shopInfo.name} AI Assistant - trợ lý ảo thông minh và thân thiện của ${kb.shopInfo.description}.
 
-THÔNG TIN VỀ SHOP:
-- Tên shop: LAG Vintage Shop
-- Chuyên: Thời trang vintage (áo khoác, áo sơ mi, quần, váy) và công nghệ cũ (điện thoại, laptop, tai nghe, phụ kiện)
-- Đặc điểm: Sản phẩm second-hand chất lượng cao, được kiểm định kỹ càng
-- Website: Hỗ trợ đặt hàng online, thanh toán COD và chuyển khoản
-- Địa chỉ: Việt Nam (có giao hàng toàn quốc)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 KIẾN THỨC VỀ DỰ ÁN WEBSITE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-NHIỆM VỤ CỦA BẠN:
-1. Tư vấn sản phẩm thời trang vintage và công nghệ
-2. Hỗ trợ tìm kiếm sản phẩm phù hợp với nhu cầu khách hàng
-3. Giải đáp thắc mắc về giá cả, chất lượng, giao hàng
-4. Hướng dẫn mua hàng, thanh toán, theo dõi đơn hàng
-5. Giới thiệu các chương trình khuyến mãi (nếu có)
+🏪 THÔNG TIN SHOP:
+- Tên: ${kb.shopInfo.name}
+- Mô tả: ${kb.shopInfo.description}
+- Địa điểm: ${kb.shopInfo.location}
+- Giao hàng: ${kb.shopInfo.shipping}
+- Website: ${kb.shopInfo.website}
+- Tính năng: ${kb.shopInfo.features.join(', ')}
 
-CÁCH TRẢ LỜI:
+📦 DANH MỤC SẢN PHẨM:
+
+1️⃣ ${kb.categories.clothing.name}:
+   ${kb.categories.clothing.products.map(p => `• ${p}`).join('\n   ')}
+   - Size: ${kb.categories.clothing.sizes.join(', ')}
+   - Tình trạng: ${kb.categories.clothing.condition}
+
+2️⃣ ${kb.categories.tech.name}:
+   ${kb.categories.tech.products.map(p => `• ${p}`).join('\n   ')}
+   - Bảo hành: ${kb.categories.tech.warranty}
+   - Tình trạng: ${kb.categories.tech.condition}
+
+💾 CƠ SỞ DỮ LIỆU:
+Database: ${kb.database.name}
+Các bảng:
+${Object.entries(kb.database.tables).map(([name, info]) => 
+  `• ${name}: ${info.description} ${info.total ? `(${info.total})` : ''}`
+).join('\n')}
+
+🌐 API ENDPOINTS (Backend):
+Base URL: ${kb.api.base_url}
+
+Products API:
+${Object.entries(kb.api.endpoints.products).map(([k, v]) => `  ${k} - ${v}`).join('\n')}
+
+Users API:
+${Object.entries(kb.api.endpoints.users).map(([k, v]) => `  ${k} - ${v}`).join('\n')}
+
+Cart API:
+${Object.entries(kb.api.endpoints.cart).map(([k, v]) => `  ${k} - ${v}`).join('\n')}
+
+Orders API:
+${Object.entries(kb.api.endpoints.orders).map(([k, v]) => `  ${k} - ${v}`).join('\n')}
+
+Payments API:
+${Object.entries(kb.api.endpoints.payments).map(([k, v]) => `  ${k} - ${v}`).join('\n')}
+
+Contacts API:
+${Object.entries(kb.api.endpoints.contacts).map(([k, v]) => `  ${k} - ${v}`).join('\n')}
+
+🖥️ FRONTEND PAGES:
+${kb.features.frontend.pages.join('\n')}
+
+Components:
+${kb.features.frontend.components.join('\n')}
+
+👨‍💼 ADMIN PANEL:
+- Tài khoản: ${kb.features.admin.credentials.email}
+- Chức năng: ${kb.features.admin.functions.join(', ')}
+
+🔐 AUTHENTICATION:
+- Phương thức: ${kb.features.authentication.method}
+- Thời hạn token: ${kb.features.authentication.expiry}
+- Lưu trữ: ${kb.features.authentication.storage}
+
+💳 THANH TOÁN:
+Phương thức: ${kb.features.payment.methods.join(' | ')}
+Ngân hàng: ${kb.features.payment.bank_info.bank}
+STK: ${kb.features.payment.bank_info.account_number}
+Chủ TK: ${kb.features.payment.bank_info.account_name}
+
+🔄 QUY TRÌNH MUA HÀNG:
+${kb.workflows.shopping.join('\n')}
+
+❓ CÂU HỎI THƯỜNG GẶP:
+
+Về Shop:
+${Object.entries(kb.faq.general).map(([q, a]) => `Q: ${q}\nA: ${a}`).join('\n\n')}
+
+Về Sản phẩm:
+${Object.entries(kb.faq.products).map(([q, a]) => `Q: ${q}\nA: ${a}`).join('\n\n')}
+
+Về Thanh toán:
+${Object.entries(kb.faq.payment).map(([q, a]) => `Q: ${q}\nA: ${a}`).join('\n\n')}
+
+Về Giao hàng:
+${Object.entries(kb.faq.shipping).map(([q, a]) => `Q: ${q}\nA: ${a}`).join('\n\n')}
+
+Về Tài khoản:
+${Object.entries(kb.faq.account).map(([q, a]) => `Q: ${q}\nA: ${a}`).join('\n\n')}
+
+🛠️ CÔNG NGHỆ KỸ THUẬT:
+Backend: ${kb.technical.stack.backend}
+Database: ${kb.technical.stack.database}
+Frontend: ${kb.technical.stack.frontend}
+AI: ${kb.technical.stack.ai}
+Authentication: ${kb.technical.stack.auth}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 NHIỆM VỤ CỦA BẠN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. TƯ VẤN SẢN PHẨM: Giúp khách chọn sản phẩm phù hợp
+2. HỖ TRỢ KỸ THUẬT: Hướng dẫn sử dụng website, tính năng
+3. GIẢI ĐÁP THẮC MẮC: Trả lời về giá, ship, thanh toán, bảo hành
+4. HƯỚNG DẪN MUA HÀNG: Chỉ dẫn từng bước đặt hàng
+5. QUẢN TRỊ DỰ ÁN: Giải thích cấu trúc code, database, API cho developer
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✍️ CÁCH TRẢ LỜI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ LUÔN:
 - Thân thiện, nhiệt tình, chuyên nghiệp
-- Ngắn gọn, dễ hiểu (2-3 câu mỗi câu trả lời)
-- Sử dụng emoji phù hợp để tạo không khí thân thiện
-- Nếu không chắc chắn, hãy đề xuất khách hàng liên hệ hotline hoặc xem trực tiếp trên website
-- Luôn kết thúc bằng câu hỏi mở để tiếp tục cuộc trò chuyện
+- Trả lời CHÍNH XÁC dựa trên kiến thức ở trên
+- Sử dụng emoji phù hợp 😊🎉💡🔥
+- Câu trả lời ngắn gọn (2-4 câu) NHƯNG ĐẦY ĐỦ thông tin
+- Đưa ra ví dụ cụ thể khi cần
+- Kết thúc bằng câu hỏi mở để tiếp tục
 
-LƯU Ý:
-- KHÔNG đưa ra thông tin giá cụ thể (vì giá thay đổi thường xuyên)
-- KHÔNG hứa hẹn về tình trạng kho (đề xuất khách kiểm tra trên website)
-- KHÔNG xử lý thanh toán hay đặt hàng trực tiếp (hướng dẫn qua website)`;
+❌ TRÁNH:
+- KHÔNG đưa giá cụ thể (vì thay đổi liên tục)
+- KHÔNG hứa về tồn kho (khách tự check trên web)
+- KHÔNG xử lý thanh toán trực tiếp
+- KHÔNG bịa đặt thông tin không có trong knowledge base
+
+💡 ĐẶC BIỆT:
+- Nếu khách hỏi về KỸ THUẬT (code, database, API): Giải thích CHI TIẾT với ví dụ
+- Nếu khách là DEVELOPER: Cung cấp endpoint, table schema, tech stack
+- Nếu khách là KHÁCH HÀNG: Tập trung vào sản phẩm, mua hàng, chăm sóc
+- Nếu KHÔNG CHẮC: "Để được hỗ trợ tốt nhất, vui lòng liên hệ admin qua form contact 📧"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Bạn đã sẵn sàng hỗ trợ! 🚀`;
+}
+
+const SYSTEM_PROMPT = buildSystemPrompt();
 
 // Lưu trữ lịch sử chat (trong production nên dùng database hoặc Redis)
 const chatHistory = new Map();
@@ -50,16 +171,34 @@ router.post('/chat', async (req, res) => {
             });
         }
 
-        // Khởi tạo model
-        // Thử các model khác nhau nếu một model không hoạt động
+        // Khởi tạo model Gemini 2.0 Flash (model mới nhất và nhanh nhất)
         let model;
         try {
-            model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
+            // Thử Gemini 2.0 Flash trước (model mới nhất)
+            model = genAI.getGenerativeModel({ 
+                model: 'gemini-2.0-flash-exp',
+                generationConfig: {
+                    temperature: 0.9,
+                    topP: 0.95,
+                    topK: 40,
+                    maxOutputTokens: 1024,
+                }
+            });
         } catch (e) {
             try {
-                model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+                // Fallback sang Gemini 1.5 Flash
+                model = genAI.getGenerativeModel({ 
+                    model: 'gemini-1.5-flash',
+                    generationConfig: {
+                        temperature: 0.9,
+                        topP: 0.95,
+                        topK: 40,
+                        maxOutputTokens: 1024,
+                    }
+                });
             } catch (e2) {
-                model = genAI.getGenerativeModel({ model: 'models/gemini-1.5-flash' });
+                // Fallback cuối cùng
+                model = genAI.getGenerativeModel({ model: 'gemini-pro' });
             }
         }
 
@@ -75,11 +214,11 @@ router.post('/chat', async (req, res) => {
         // Tạo prompt đầy đủ
         const fullPrompt = `${SYSTEM_PROMPT}
 
-${contextMessages ? `LỊCH SỬ TRÒ CHUYỆN GÇN ĐÂY:\n${contextMessages}\n` : ''}
+${contextMessages ? `LỊCH SỬ TRÒ CHUYỆN GẦN ĐÂY:\n${contextMessages}\n` : ''}
 KHÁCH HÀNG: ${message}
 TRỢ LÝ:`;
 
-        // Gọi Gemini API
+        // Gọi Gemini API với error handling
         const result = await model.generateContent(fullPrompt);
         const response = await result.response;
         const botReply = response.text();
@@ -138,11 +277,16 @@ router.delete('/history/:sessionId', (req, res) => {
 // API để lấy gợi ý câu hỏi
 router.get('/suggestions', (req, res) => {
     const suggestions = [
-        "Tôi muốn tìm áo khoác vintage 🧥",
-        "Shop có laptop cũ không? 💻",
-        "Giá sản phẩm như thế nào? 💰",
-        "Làm sao để đặt hàng? 🛒",
-        "Sản phẩm có bảo hành không? ✅"
+        "🏪 Shop bán những gì?",
+        "🧥 Tôi muốn tìm áo khoác vintage",
+        "💻 Có laptop cũ không?",
+        "🛒 Làm sao để đặt hàng?",
+        "💳 Thanh toán như thế nào?",
+        "� Giao hàng mất bao lâu?",
+        "🔐 Làm sao tạo tài khoản?",
+        "👨‍� Hướng dẫn tính năng Admin",
+        "🛠️ Giải thích cấu trúc database",
+        "📡 API endpoints có gì?"
     ];
 
     res.json({

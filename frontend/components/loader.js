@@ -70,9 +70,13 @@ function updateCartCount() {
 
 // Initialize chatbot functionality  
 function initializeChatbot() {
-    // Chatbot được khởi tạo bởi chatbot.js
-    // Chỉ cần đợi component load xong
-    console.log('Chatbot component loaded');
+    // Gọi function startChatbot từ chatbot.js sau khi HTML đã load xong
+    if (typeof startChatbot === 'function') {
+        startChatbot();
+        console.log('✅ Chatbot component loaded and initialized');
+    } else {
+        console.error('❌ startChatbot function not found');
+    }
 }
 
 // Initialize search functionality
